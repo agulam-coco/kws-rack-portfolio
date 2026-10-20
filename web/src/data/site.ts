@@ -59,10 +59,13 @@ export const ports: { label: string; stage: StageId; cable: string }[] = [
     { label: "SFP", stage: "overview", cable: "" }
 ];
 
-export const now = [
-    ["building", "this rack"],
-    ["learning", "embedded audio"],
-    ["based in", "Grinnell, IA"],
+// Each row types out its first value, then rows with more than one value
+// take turns: erase, type the next one, wait, repeat.
+// Keep values under ~24 characters so they fit on the screen.
+export const now: { key: string; values: string[] }[] = [
+    { key: "building", values: ["this rack", "the cable system", "a hackathon at Grinnell"] },
+    { key: "learning", values: ["embedded audio", "GSAP + scroll"] },
+    { key: "based in", values: ["Grinnell, IA"] },
 ];
 
 export const experience = [
