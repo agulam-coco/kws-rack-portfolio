@@ -5,11 +5,10 @@
     overflow: hidden;
     display: flex;
     justify-content: center;
-    perspective: 1800px;
-    perspective-origin: 50% 25%;
+    perspective: 2200px;
+    perspective-origin: 50% 20%;
 }
 
-/* vignette so the edges fall off into darkness */
 .viewport::after {
     content: "";
     position: absolute;
@@ -18,14 +17,15 @@
     background: radial-gradient(70% 70% at 50% 45%, transparent 40%, rgba(0, 0, 0, .65) 100%);
 }
 
-.camera {
-    width: max-content;
-    transform-style: preserve-3d;
-    will-change: transform;
-}
-
+.camera,
+.tilt,
 .rack {
     transform-style: preserve-3d;
+}
+
+.camera {
+    width: max-content;
+    will-change: transform;
 }
 
 /* ---------- plates stick out from the rails ---------- */
@@ -44,35 +44,52 @@
     pointer-events: none;
 }
 
-/* top edge, visible while the rack is tilted back */
+/* top edge, folds BACK toward the rails */
 .plate::before {
     top: 0;
     transform-origin: top;
-    transform: rotateX(90deg);
+    transform: rotateX(-90deg);
     background: linear-gradient(#f7eee2, #dccdb8);
 }
 
-/* bottom edge */
+/* bottom edge, folds BACK toward the rails */
 .plate::after {
     bottom: 0;
     transform-origin: bottom;
-    transform: rotateX(-90deg);
+    transform: rotateX(90deg);
     background: #a8977f;
 }
 
-/* ---------- rack side panel, visible during the intro turn ---------- */
+/* ---------- rack body ---------- */
+/* top lid, visible when looking down at the rack */
+.rack-top {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    height: 320px;
+    /* rack depth */
+    transform-origin: top;
+    transform: rotateX(-90deg);
+    background:
+        var(--noise),
+        linear-gradient(#d9cab4, #b9a78e);
+    border-radius: 2px;
+}
+
+/* right side panel, visible during the intro turn */
 .rack-side {
     position: absolute;
     top: 40px;
     bottom: 0;
     right: 0;
     width: 320px;
-    /* rack depth */
+    /* same depth as the lid */
     transform-origin: right;
-    transform: rotateY(90deg);
+    transform: rotateY(-90deg);
     background:
         radial-gradient(circle, #050505 3px, transparent 3.6px) 12px 0 / 22px 18px repeat-y,
-        linear-gradient(90deg, #1d1d1d, #0c0c0c);
+        linear-gradient(90deg, #0c0c0c, #1d1d1d);
 }
 
 /* ---------- things that sit further out ---------- */

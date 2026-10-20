@@ -11,8 +11,10 @@ export default function Home() {
     return (
         <main ref={scene} className="scene">
             <div className="viewport">
-                <div className="camera">
-                    <Rack />
+                <div className="camera">   {/* pan + zoom */}
+                    <div className="tilt">   {/* 3D rotation only */}
+                        <Rack />
+                    </div>
                 </div>
             </div>
         </main>

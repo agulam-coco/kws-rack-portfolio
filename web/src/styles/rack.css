@@ -1,44 +1,3 @@
-/* ---------- page layout ---------- */
-.home {
-    display: grid;
-    grid-template-columns: 55% 45%;
-    min-height: 100vh;
-}
-
-.rack-col {
-    display: flex;
-    justify-content: center;
-    padding: 56px 0;
-    overflow: hidden;
-}
-
-.captions {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 8vw 0 2vw;
-}
-
-.cap-label {
-    font: 500 13px var(--font-mono);
-    color: var(--green);
-    letter-spacing: .06em;
-    margin: 0;
-}
-
-.cap-title {
-    font-size: clamp(36px, 4vw, 56px);
-    line-height: 1.02;
-    margin: 12px 0 16px;
-}
-
-.cap-body {
-    color: var(--muted);
-    font: 15px/1.65 var(--font-mono);
-    max-width: 38ch;
-    margin: 0;
-}
-
 /* ---------- frame ---------- */
 .rack {
     position: relative;
@@ -51,7 +10,9 @@
     top: 40px;
     bottom: 0;
     width: 22px;
-    background: radial-gradient(circle, #050505 3px, transparent 3.6px) center 0 / 22px 18px repeat-y, var(--rail);
+    background:
+        radial-gradient(circle, #000 2.6px, #2e2e2e 3.2px, transparent 3.8px) center 0 / 22px 18px repeat-y,
+        linear-gradient(90deg, #0d0d0d, #2a2a2a 40%, #121212);
 }
 
 .rail.l {
@@ -70,7 +31,12 @@
     padding: 18px 64px 18px 28px;
     /* 64px on the right = cable channel */
     color: var(--ink);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -2px 0 rgba(0, 0, 0, .12), 0 2px 4px rgba(0, 0, 0, .45);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .7),
+        inset 0 -3px 4px rgba(0, 0, 0, .18),
+        inset 2px 0 2px rgba(255, 255, 255, .25),
+        inset -2px 0 3px rgba(0, 0, 0, .12),
+        0 10px 18px rgba(0, 0, 0, .55);
 }
 
 .led {
@@ -88,7 +54,7 @@
     height: 13px;
     border-radius: 2px;
     background: #0d0d0d;
-    box-shadow: inset 0 3px 0 #000, 0 0 0 2px #2b2b2b;
+    box-shadow: inset 0 4px 4px #000, inset 0 -1px 0 #2a2a2a, 0 0 0 2px #1a1c1f, 0 1px 0 rgba(255, 255, 255, .08);
 }
 
 .tag {
@@ -134,8 +100,8 @@
 .engraved {
     font-size: 30px;
     margin: 0;
-    color: #2b2723;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .6);
+    color: #3a342d;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .55), 0 -1px 0 rgba(0, 0, 0, .25);
 }
 
 .status {
@@ -208,7 +174,7 @@
     height: 22px;
     border-radius: 2px;
     background: #0b0b0b;
-    box-shadow: inset 0 3px 0 #000, 0 0 0 2px #1a1c1f;
+    box-shadow: inset 0 4px 4px #000, inset 0 -1px 0 #2a2a2a, 0 0 0 2px #1a1c1f, 0 1px 0 rgba(255, 255, 255, .08);
 }
 
 .jack .led {
@@ -222,7 +188,7 @@
 
 .port:hover .jack,
 .port:focus-visible .jack {
-    box-shadow: inset 0 3px 0 #000, 0 0 0 2px var(--green);
+    box-shadow: inset 0 4px 4px #000, 0 0 0 2px var(--green);
 }
 
 /* ---------- now display ---------- */
@@ -268,34 +234,36 @@
 
 /* ---------- projects shelf ---------- */
 .perf {
-    background: radial-gradient(circle, rgba(30, 25, 20, .85) 2px, transparent 2.6px) 0 0 / 12px 12px, var(--plate);
+    background:
+        radial-gradient(circle, rgba(30, 25, 20, .85) 2.4px, transparent 3px) 0 0 / 13px 13px,
+        var(--plate);
 }
 
 .bay {
     width: max-content;
     margin: 0 auto;
     display: flex;
-    gap: 14px;
-    padding: 46px 18px 16px;
+    gap: 3px;
+    padding: 46px 4px 4px;
     /* top space = where cables turn into the nodes */
-    background: #14110e;
-    border-radius: 4px;
-    box-shadow: inset 0 4px 12px rgba(0, 0, 0, .8);
+    background: #0a0a0a;
+    border-radius: 3px;
+    box-shadow: inset 0 3px 10px rgba(0, 0, 0, .9);
 }
 
 .node {
     position: relative;
-    width: 62px;
-    height: 250px;
-    padding: 14px 0 12px;
-    border-radius: 6px;
+    width: 74px;
+    height: 290px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    color: #eee;
-    background: linear-gradient(90deg, #0d0d0d, #1c1c1c 50%, #0d0d0d);
-    box-shadow: 0 2px 0 #000, inset 0 1px 0 rgba(255, 255, 255, .08);
+    border-radius: 3px;
+    background: #111;
+    box-shadow:
+        inset 1px 0 0 rgba(255, 255, 255, .06),
+        inset -1px 0 0 rgba(0, 0, 0, .7),
+        inset 0 1px 0 rgba(255, 255, 255, .1),
+        0 4px 10px rgba(0, 0, 0, .6);
     transition: transform .25s;
 }
 
@@ -303,44 +271,91 @@
     top: -9px;
     left: 50%;
     translate: -50% 0;
+    z-index: 2;
+}
+
+/* hex mesh vent */
+.node-top {
+    position: relative;
+    flex: 0 0 50%;
+    border-radius: 3px 3px 0 0;
+    background:
+        radial-gradient(circle, #000 1.7px, transparent 2.2px) 0 0 / 6px 10px,
+        radial-gradient(circle, #000 1.7px, transparent 2.2px) 3px 5px / 6px 10px,
+        linear-gradient(90deg, #161616, #242424 50%, #161616);
+    box-shadow: inset 0 -1px 0 #000;
 }
 
 .node-name {
+    position: absolute;
+    top: 12px;
+    left: 9px;
     writing-mode: vertical-rl;
     rotate: 180deg;
-    height: 110px;
-    font: 600 10px var(--font-mono);
-    letter-spacing: .14em;
+    max-height: 120px;
+    font: 600 9px var(--font-display);
+    letter-spacing: .06em;
+    color: #eaeaea;
+    text-shadow: 0 0 2px #000, 0 0 4px #000;
 }
 
-.stripe {
-    width: 30px;
-    height: 4px;
+/* colored band across the seam */
+.node-band {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    right: 13px;
+    height: 14px;
+    translate: 0 -50%;
     border-radius: 2px;
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
+    background: linear-gradient(var(--accent), color-mix(in srgb, var(--accent) 65%, #000));
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .35),
+        0 0 10px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* solid lower body with front I/O */
+.node-bottom {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    padding: 24px 0 12px;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(90deg, #0b0b0b, #1b1b1b 50%, #0b0b0b);
 }
 
 .usb {
-    width: 14px;
-    height: 8px;
-    background: #0a0a0a;
-    border: 1.5px solid #3a3a3a;
+    width: 9px;
+    height: 18px;
     border-radius: 1px;
+    background: linear-gradient(90deg, #000 0 30%, #3a3a3a 30% 58%, #000 58%);
+    box-shadow: 0 0 0 1.5px #4a4a4a, inset 0 0 2px #000;
 }
 
 .audio {
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background: #050505;
-    border: 1.5px solid #3a3a3a;
+    background: radial-gradient(circle, #000 1.8px, #2c2c2c 2.4px, #111 4.5px);
+    box-shadow: 0 0 0 1px #333;
 }
 
-.node .led {
+.power {
     margin-top: auto;
-    width: 6px;
-    height: 6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at 40% 35%, #2a2a2a, #0a0a0a);
+    box-shadow: 0 0 0 1.5px #333, inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+.power .led {
+    width: 5px;
+    height: 5px;
 }
 
 /* ---------- builds shelf ---------- */
@@ -360,6 +375,7 @@
     color: #eee;
 }
 
+/* amp head */
 .amp {
     flex: 1.3;
     background: #151515;
@@ -395,10 +411,16 @@
     box-shadow: 0 0 8px #ff3b30;
 }
 
+/* rack-mount pi tray */
 .pi {
     flex: 1;
-    background: #121212;
-    border-bottom: 3px solid var(--accent);
+    background: linear-gradient(180deg, #2b2d30, #16181a);
+    border-radius: 4px;
+    border-bottom: 2px solid var(--accent);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .12),
+        inset 0 -1px 0 rgba(0, 0, 0, .6),
+        0 4px 10px rgba(0, 0, 0, .5);
 }
 
 .pi .rj45 {
@@ -406,30 +428,57 @@
     right: 24px;
 }
 
-.pcb {
-    position: relative;
-    height: 62px;
-    border-radius: 4px;
-    background: linear-gradient(#0f5132, #0b3d26);
-    border: 2px solid rgba(255, 255, 255, .15);
+.pi-face {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px;
 }
 
-.fan {
-    position: absolute;
-    right: 10px;
-    top: 8px;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: repeating-conic-gradient(#111 0 20deg, #2a2a2a 20deg 40deg);
+.pi-vents {
+    grid-column: 1 / -1;
+    height: 16px;
+    border-radius: 2px;
+    background: repeating-linear-gradient(90deg, #050505 0 3px, transparent 3px 7px);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .8);
 }
 
-.pcb .led {
-    position: absolute;
-    left: 10px;
-    bottom: 8px;
+.oled {
+    padding: 5px 7px;
+    border-radius: 2px;
+    background: #000;
+    box-shadow: inset 0 0 0 1px #222;
+    font: 9px/1.35 var(--font-mono);
+    color: #7cc8d8;
+}
+
+.oled b {
+    display: block;
+    color: #fff;
+    font-weight: 600;
+}
+
+.pi-leds {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    align-self: center;
+}
+
+.pi-leds .led {
     width: 5px;
     height: 5px;
+}
+
+.pi-leds .act {
+    background: #ffb84d;
+    box-shadow: 0 0 6px #ffb84d;
+    animation: blink 1.3s steps(2) infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: .2;
+    }
 }
 
 .unit-label {

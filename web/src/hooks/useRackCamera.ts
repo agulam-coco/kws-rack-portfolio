@@ -7,7 +7,6 @@ import { stages } from "../data/site";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 // How much of the screen width the rack fills once it's facing you.
-// 0.58 roughly matches your screenshot. Raise it to zoom in more.
 const FILL = 0.58;
 
 export function useRackCamera(scope: RefObject<HTMLElement | null>) {
@@ -15,18 +14,21 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>) {
         const root = scope.current!;
         const viewport = root.querySelector<HTMLElement>(".viewport")!;
         const camera = root.querySelector<HTMLElement>(".camera")!;
+        const tilt = root.querySelector<HTMLElement>(".tilt")!;
         const rack = root.querySelector<HTMLElement>(".rack")!;
 
         const zoom = () => (window.innerWidth * FILL) / rack.offsetWidth;
 
-        // y that puts a unit's center in the middle of the screen
         const yFor = (id: string) => () => {
             const unit = rack.querySelector<HTMLElement>(`[data-stage="${id}"]`)!;
             const center = unit.offsetTop + unit.offsetHeight / 2;
             return window.innerHeight / 2 - center * zoom();
         };
 
+        // camera zooms from its top edge (keeps the y math simple)
         gsap.set(camera, { transformOrigin: "50% 0" });
+        // tilt rotates around the middle of the rack so nothing swings way out
+        gsap.set(tilt, { transformOrigin: "50% 45%" });
 
         const tl = gsap.timeline({
             defaults: { ease: "power2.inOut", duration: 1 },
@@ -36,25 +38,35 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>) {
                 end: () => `+=${window.innerHeight * stages.length}`,
                 pin: true,
                 scrub: 1,
-                invalidateOnRefresh: true, // recompute on resize
+                invalidateOnRefresh: true,
                 snap: { snapTo: "labels", duration: { min: 0.2, max: 0.6 }, delay: 0.1 },
             },
         });
 
-        // 1. Intro: tilted back like the tablet, swings up to face you
-        tl.addLabel("intro", 0).fromTo(
-            camera,
-            { rotateX: 38, rotateY: -16, scale: () => zoom() * 0.6, y: () => window.innerHeight * 0.1 },
-            { rotateX: 0, rotateY: 0, scale: zoom, y: yFor("overview") }
-        );
-        tl.addLabel("overview");
+        // Intro: whole rack small and centered, looking down at it from the
+        // upper right, then it turns to face you and zooms in.
+        tl.addLabel("intro", 0)
+            .fromTo(
+                camera,
+                {
+                    scale: () => (window.innerHeight * 0.8) / rack.offsetHeight,
+                    y: () => window.innerHeight * 0.06,
+                },
+                { scale: zoom, y: yFor("overview") },
+                "intro"
+            )
+            .fromTo(
+                tilt,
+                { rotateX: -24, rotateY: -22 },
+                { rotateX: 0, rotateY: 0 },
+                "intro"
+            )
+            .addLabel("overview");
 
-        // 2. Pan down to each unit
         stages.slice(1).forEach((s) => {
             tl.to(camera, { y: yFor(s.id) }).addLabel(s.id);
         });
 
-        // fonts load late and shift layout, so re-measure once they're in
         document.fonts.ready.then(() => ScrollTrigger.refresh());
     }, { scope });
 }
