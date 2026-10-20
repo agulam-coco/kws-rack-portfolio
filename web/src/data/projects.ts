@@ -17,7 +17,7 @@ export const projects: Project[] = [
         event: "ShellHacks 2026 · with Robert Cifuentes",
         summary: "A tiny screen on your monitor showing what your AI agents are doing, with a real button to approve risky actions.",
         tags: ["ESP32-C3", "Hardware", "Claude Code"],
-        action: { type: "external", href: "https://www.github.com/agulam-coco/watch-my-tokens", label: "Live" },
+        action: { type: "external", href: "https://github.com/agulam-coco/watch-my-tokens", label: "GitHub" },
     },
     {
         id: "fissure", name: "Fissure", shelf: "nodes", color: "#f59e0b",

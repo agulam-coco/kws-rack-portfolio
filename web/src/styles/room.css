@@ -21,10 +21,11 @@
     user-select: none;
 }
 
-/* color grade + lamp strength, animated from JS */
+/* color grade, lamp, and side panel, animated from JS */
 .rack {
     --grade: .65;
     --lamp: 1;
+    --side: 1;
 }
 
 /* ---------- shadows ---------- */
@@ -70,6 +71,22 @@
     left: 22px;
     right: 22px;
     background: #0e0c0a;
+}
+
+/* right side panel, matches the painted rack during the swap.
+   fades out once you're zoomed in */
+.rack-side2d {
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    right: -90px;
+    width: 90px;
+    clip-path: polygon(0 0, 100% 3%, 100% 95%, 0 100%);
+    opacity: var(--side);
+    background:
+        linear-gradient(180deg, rgba(255, 180, 110, .18), transparent 60%),
+        linear-gradient(90deg, #2a221b, #120f0c 75%);
+    pointer-events: none;
 }
 
 /* ---------- lighting ---------- */
@@ -156,4 +173,30 @@
     pointer-events: none;
     background-image: var(--noise);
     opacity: .55;
+}
+
+/* ---------- snapshot page ---------- */
+.snapshot {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 80px 0;
+    background: #808080;
+    /* neutral gray, easy for the AI to separate */
+    zoom: 2;
+    /* render at 2x for a sharp capture */
+}
+
+/* neutral lighting, so the AI does the relighting */
+.snapshot .rack {
+    --grade: 0;
+    --lamp: 0;
+}
+
+/* drop the room-specific shadows so there's no dark smudge around it */
+.snapshot .rack-wall-shadow,
+.snapshot .rack-desk-shadow,
+.snapshot .rack-shadow,
+.snapshot .rack-side2d {
+    display: none;
 }

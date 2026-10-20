@@ -14,6 +14,7 @@ export default function Rack() {
             <span className="rack-wall-shadow" />
             <span className="rack-desk-shadow" />
             <span className="rack-back" />
+            <span className="rack-side2d" />
             <span className="rail l" /><span className="rail r" />
             <span className="rack-top" />
             <span className="rack-side" />

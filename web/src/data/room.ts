@@ -4,8 +4,8 @@ export const ROOM = {
     w: 1672,
     h: 940,
     spot: {
-        cx: 836,     // horizontal center of the empty desk spot
-        baseY: 505,  // where the bottom of the rack stands on the desk
-        height: 310, // how tall the rack should look in the room
+        cx: 830,     // center of the painted rack's front
+        baseY: 495,  // where the painted rack meets the desk
+        height: 345, // painted rack height, including handles
     },
 };
