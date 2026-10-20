@@ -1,0 +1,61 @@
+.loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    transition: opacity .6s ease, visibility 0s linear .6s;
+}
+
+.loader.is-done {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-inner {
+    width: min(260px, 70vw);
+    font-family: var(--font-mono);
+}
+
+.loader-line {
+    margin: 0 0 12px;
+    font-size: 12px;
+    letter-spacing: .08em;
+    color: var(--led);
+    text-shadow: 0 0 8px rgba(93, 255, 138, .4);
+}
+
+.loader-line::after {
+    content: "_";
+    animation: caret 1s steps(2) infinite;
+}
+
+@keyframes caret {
+    50% {
+        opacity: 0;
+    }
+}
+
+.loader-bar {
+    height: 2px;
+    background: #2a2622;
+    overflow: hidden;
+}
+
+.loader-bar i {
+    display: block;
+    height: 100%;
+    background: var(--led);
+    box-shadow: 0 0 8px var(--led);
+    transform-origin: left;
+    transition: transform .3s ease;
+}
+
+.loader-pct {
+    margin: 10px 0 0;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+}

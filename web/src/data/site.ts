@@ -2,8 +2,8 @@ export const person = {
     name: "Jason Chigabatia",
     role: "CS + Linguistics @ Grinnell '28",
     email: "chigabat@grinnell.edu",
-    linkedin: "https://www.linkedin.com/in/jason-chigabatia",
-    github: "https://www.guthub.com/agulam-coco",
+    linkedin: "https://linkedin.com/in/jason-chigabatia",
+    github: "https://github.com/agulam-coco",
 };
 
 export const stages = [
@@ -54,9 +54,9 @@ export const ports: { label: string; stage: StageId; cable: string }[] = [
     { label: "WMT", stage: "projects", cable: "watch-my-tokens" },
     { label: "FISSURE", stage: "projects", cable: "fissure" },
     { label: "FREESOUND", stage: "projects", cable: "freesound" },
-    { label: "ODOO", stage: "projects", cable: "odoo-dashboard" },
     { label: "BUILDS", stage: "builds", cable: "builds" },
     { label: "CONTACT", stage: "contact", cable: "contact" },
+    { label: "SFP", stage: "overview", cable: "" }
 ];
 
 export const now = [
