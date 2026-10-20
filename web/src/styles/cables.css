@@ -1,0 +1,66 @@
+.cables {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.cables path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* soft shadow of the cables on the rack */
+.cable-shadows path {
+    stroke: rgba(0, 0, 0, .32);
+    stroke-width: 8;
+    transform: translate(2.5px, 3.5px);
+}
+
+/* thin highlight down each cable so it reads as round */
+.cable-shine {
+    stroke: rgba(255, 255, 255, .55);
+    stroke-width: .9;
+    transform: translate(-.8px, -.7px);
+}
+
+/* RJ45 plug: clear body + rubber boot */
+.plug .plug-body {
+    fill: rgba(225, 232, 226, .55);
+    stroke: rgba(255, 255, 255, .7);
+    stroke-width: .6;
+}
+
+.plug .boot {
+    stroke: rgba(0, 0, 0, .35);
+    stroke-width: .5;
+}
+
+.plug .boot-ribs {
+    stroke: rgba(0, 0, 0, .25);
+    stroke-width: .6;
+}
+
+/* velcro strap */
+.strap rect {
+    fill: #7dc444;
+    stroke: rgba(0, 0, 0, .35);
+    stroke-width: .6;
+}
+
+.strap .strap-tab {
+    fill: #6aad35;
+}
+
+/* black D-ring cable hook */
+.ring rect {
+    fill: #121212;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .5));
+}
+
+.ring .ring-shine {
+    fill: rgba(255, 255, 255, .14);
+    filter: none;
+}

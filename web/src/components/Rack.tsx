@@ -6,6 +6,8 @@ import NodeShelf from "./units/NodeShelf";
 import BuildsShelf from "./units/BuildsShelf";
 import BottomPanel from "./units/BottomPanel";
 import RackHandle from "./units/RackHandle";
+import Cables from "./Cables";
+
 
 export default function Rack() {
     return (
@@ -29,6 +31,7 @@ export default function Rack() {
             <NodeShelf />
             <BuildsShelf />
             <BottomPanel />
+            <Cables />
 
             {/* color grade + lamp lighting, on top of everything */}
             <span className="rack-grade" />

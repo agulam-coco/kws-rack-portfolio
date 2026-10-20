@@ -252,8 +252,8 @@
 
 .node .rj45 {
     top: -9px;
-    left: 50%;
-    translate: -50% 0;
+    left: calc(50% - 8px);
+    /* centered without translate, so the cable code can measure it */
     z-index: 2;
 }
 
