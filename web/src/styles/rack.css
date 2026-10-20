@@ -1,0 +1,500 @@
+/* ---------- page layout ---------- */
+.home {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    min-height: 100vh;
+}
+
+.rack-col {
+    display: flex;
+    justify-content: center;
+    padding: 56px 0;
+    overflow: hidden;
+}
+
+.captions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 8vw 0 2vw;
+}
+
+.cap-label {
+    font: 500 13px var(--font-mono);
+    color: var(--green);
+    letter-spacing: .06em;
+    margin: 0;
+}
+
+.cap-title {
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: 1.02;
+    margin: 12px 0 16px;
+}
+
+.cap-body {
+    color: var(--muted);
+    font: 15px/1.65 var(--font-mono);
+    max-width: 38ch;
+    margin: 0;
+}
+
+/* ---------- frame ---------- */
+.rack {
+    position: relative;
+    width: 560px;
+    padding: 0 22px;
+}
+
+.rail {
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    width: 22px;
+    background: radial-gradient(circle, #050505 3px, transparent 3.6px) center 0 / 22px 18px repeat-y, var(--rail);
+}
+
+.rail.l {
+    left: 0;
+}
+
+.rail.r {
+    right: 0;
+}
+
+.plate {
+    position: relative;
+    background: var(--plate);
+    border-radius: 4px;
+    margin-bottom: 6px;
+    padding: 18px 64px 18px 28px;
+    /* 64px on the right = cable channel */
+    color: var(--ink);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -2px 0 rgba(0, 0, 0, .12), 0 2px 4px rgba(0, 0, 0, .45);
+}
+
+.led {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--led);
+    box-shadow: 0 0 6px var(--led), 0 0 14px rgba(93, 255, 138, .45);
+}
+
+.rj45 {
+    position: absolute;
+    width: 16px;
+    height: 13px;
+    border-radius: 2px;
+    background: #0d0d0d;
+    box-shadow: inset 0 3px 0 #000, 0 0 0 2px #2b2b2b;
+}
+
+.tag {
+    position: absolute;
+    top: 9px;
+    left: 28px;
+    font: 600 9px var(--font-mono);
+    letter-spacing: .12em;
+    opacity: .65;
+}
+
+/* ---------- name plate ---------- */
+.hero {
+    margin-top: 40px;
+    padding-bottom: 34px;
+}
+
+.handles span {
+    position: absolute;
+    top: -40px;
+    width: 74px;
+    height: 46px;
+    border: 11px solid var(--beige);
+    border-bottom: 0;
+    border-radius: 40px 40px 0 0;
+}
+
+.handles span:first-child {
+    left: 50px;
+}
+
+.handles span:last-child {
+    right: 50px;
+}
+
+.eyebrow {
+    font: 500 10px var(--font-mono);
+    letter-spacing: .14em;
+    margin: 0 0 4px;
+    opacity: .7;
+}
+
+.engraved {
+    font-size: 30px;
+    margin: 0;
+    color: #2b2723;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .6);
+}
+
+.status {
+    position: absolute;
+    right: 64px;
+    top: 20px;
+    display: flex;
+    gap: 14px;
+    font: 9px var(--font-mono);
+}
+
+.status span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.hero .rj45 {
+    left: 28px;
+    bottom: 10px;
+}
+
+/* ---------- switch ---------- */
+.switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    color: #e8e8e8;
+    background: linear-gradient(#34383d, #25282c);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 2px 3px rgba(0, 0, 0, .5);
+}
+
+.brand b {
+    display: block;
+    font: 600 11px var(--font-mono);
+}
+
+.brand small {
+    font: 8px var(--font-mono);
+    color: #9aa3aa;
+}
+
+.ports {
+    display: flex;
+    gap: 2px;
+    margin-left: auto;
+}
+
+.port {
+    all: unset;
+    cursor: pointer;
+    width: 38px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.port-label {
+    font: 7px var(--font-mono);
+    color: #cfd3d6;
+}
+
+.jack {
+    position: relative;
+    width: 26px;
+    height: 22px;
+    border-radius: 2px;
+    background: #0b0b0b;
+    box-shadow: inset 0 3px 0 #000, 0 0 0 2px #1a1c1f;
+}
+
+.jack .led {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    width: 5px;
+    height: 3px;
+    border-radius: 1px;
+}
+
+.port:hover .jack,
+.port:focus-visible .jack {
+    box-shadow: inset 0 3px 0 #000, 0 0 0 2px var(--green);
+}
+
+/* ---------- now display ---------- */
+.now {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.lcd {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 4px;
+    white-space: pre;
+    font: 12px/1.6 var(--font-mono);
+    color: #7dff9b;
+    text-shadow: 0 0 6px rgba(93, 255, 138, .5);
+    background: linear-gradient(#0c140e, #08100a);
+    box-shadow: inset 0 0 0 2px #000, inset 0 0 20px rgba(0, 0, 0, .8);
+}
+
+.lcd b {
+    display: block;
+    color: #b4ffc6;
+}
+
+.now .rj45 {
+    position: static;
+    flex: none;
+}
+
+/* ---------- vent ---------- */
+.vent {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.slots {
+    height: 6px;
+    border-radius: 3px;
+    background: repeating-linear-gradient(90deg, #1d1915 0 24px, transparent 24px 32px);
+}
+
+/* ---------- projects shelf ---------- */
+.perf {
+    background: radial-gradient(circle, rgba(30, 25, 20, .85) 2px, transparent 2.6px) 0 0 / 12px 12px, var(--plate);
+}
+
+.bay {
+    width: max-content;
+    margin: 0 auto;
+    display: flex;
+    gap: 14px;
+    padding: 46px 18px 16px;
+    /* top space = where cables turn into the nodes */
+    background: #14110e;
+    border-radius: 4px;
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, .8);
+}
+
+.node {
+    position: relative;
+    width: 62px;
+    height: 250px;
+    padding: 14px 0 12px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #eee;
+    background: linear-gradient(90deg, #0d0d0d, #1c1c1c 50%, #0d0d0d);
+    box-shadow: 0 2px 0 #000, inset 0 1px 0 rgba(255, 255, 255, .08);
+    transition: transform .25s;
+}
+
+.node .rj45 {
+    top: -9px;
+    left: 50%;
+    translate: -50% 0;
+}
+
+.node-name {
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    height: 110px;
+    font: 600 10px var(--font-mono);
+    letter-spacing: .14em;
+}
+
+.stripe {
+    width: 30px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+}
+
+.usb {
+    width: 14px;
+    height: 8px;
+    background: #0a0a0a;
+    border: 1.5px solid #3a3a3a;
+    border-radius: 1px;
+}
+
+.audio {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #050505;
+    border: 1.5px solid #3a3a3a;
+}
+
+.node .led {
+    margin-top: auto;
+    width: 6px;
+    height: 6px;
+}
+
+/* ---------- builds shelf ---------- */
+.builds {
+    display: flex;
+    gap: 14px;
+    align-items: flex-end;
+    padding-top: 34px;
+}
+
+.amp,
+.pi {
+    position: relative;
+    height: 112px;
+    padding: 10px;
+    border-radius: 6px;
+    color: #eee;
+}
+
+.amp {
+    flex: 1.3;
+    background: #151515;
+    border-top: 3px solid var(--accent);
+}
+
+.grille-cloth {
+    height: 46px;
+    border-radius: 3px;
+    background: repeating-linear-gradient(45deg, #cdb98a 0 2px, #b9a473 2px 4px);
+}
+
+.knobs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.knob {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #444, #050505);
+}
+
+.jewel {
+    margin-left: auto;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #ff3b30;
+    box-shadow: 0 0 8px #ff3b30;
+}
+
+.pi {
+    flex: 1;
+    background: #121212;
+    border-bottom: 3px solid var(--accent);
+}
+
+.pi .rj45 {
+    top: -9px;
+    right: 24px;
+}
+
+.pcb {
+    position: relative;
+    height: 62px;
+    border-radius: 4px;
+    background: linear-gradient(#0f5132, #0b3d26);
+    border: 2px solid rgba(255, 255, 255, .15);
+}
+
+.fan {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: repeating-conic-gradient(#111 0 20deg, #2a2a2a 20deg 40deg);
+}
+
+.pcb .led {
+    position: absolute;
+    left: 10px;
+    bottom: 8px;
+    width: 5px;
+    height: 5px;
+}
+
+.unit-label {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font: 600 9px var(--font-mono);
+    background: var(--beige);
+    color: #222;
+}
+
+/* ---------- bottom panel ---------- */
+.bottom {
+    height: 220px;
+    padding-bottom: 28px;
+}
+
+.hatch {
+    position: relative;
+    height: 100%;
+    margin-right: 30px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #15120f;
+}
+
+.behind {
+    padding: 16px;
+    color: var(--text);
+    font: 11px/1.7 var(--font-mono);
+}
+
+.behind p {
+    margin: 0;
+}
+
+.contact-links {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.contact-links a {
+    padding: 4px 10px;
+    border: 1px solid #3a352f;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.grille {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle, #1a1612 4px, transparent 4.6px) 0 0 / 14px 24px,
+        radial-gradient(circle, #1a1612 4px, transparent 4.6px) 7px 12px / 14px 24px,
+        linear-gradient(180deg, #efe3d3, var(--beige-dark));
+}
+
+.bottom .rj45 {
+    right: 72px;
+    top: 50%;
+}
+
+.bottom-tag {
+    top: auto;
+    bottom: 8px;
+}

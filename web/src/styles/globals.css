@@ -1,12 +1,40 @@
+@import "./rack.css";
+
 :root {
     --bg: #121110;
     --text: #ece6dc;
+    --muted: #8d877d;
+    --green: #2fbf4a;
+    --led: #5dff8a;
+    --beige: #e9dccb;
+    --beige-dark: #d6c6b0;
+    --rail: #1b1b1b;
+    --ink: #2a2622;
+    --font-display: "Space Grotesk", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+    /* plate = beige + faint print lines + 4 corner screws */
+    --plate:
+        radial-gradient(circle at 12px 12px, #151515 3.5px, transparent 4.5px),
+        radial-gradient(circle at calc(100% - 12px) 12px, #151515 3.5px, transparent 4.5px),
+        radial-gradient(circle at 12px calc(100% - 12px), #151515 3.5px, transparent 4.5px),
+        radial-gradient(circle at calc(100% - 12px) calc(100% - 12px), #151515 3.5px, transparent 4.5px),
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, .03) 0 1px, transparent 1px 3px),
+        linear-gradient(180deg, #efe3d3, var(--beige-dark));
     color-scheme: dark;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    background: var(--bg);
     color: var(--text);
-    font-family: system-ui, sans-serif;
+    font-family: var(--font-display);
+    background: radial-gradient(55% 60% at 28% 45%, #2b2117 0%, var(--bg) 70%) fixed, var(--bg);
+}
+
+a {
+    color: inherit;
 }

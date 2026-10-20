@@ -3,3 +3,4 @@ dist/
 .env
 .pio/
 firmware/common/secrets.h
+.DS_Store
