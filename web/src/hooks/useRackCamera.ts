@@ -49,8 +49,7 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
                 x: rack.offsetWidth / 2 - ROOM.spot.cx * k,
                 y: rack.offsetHeight - ROOM.spot.baseY * k,
             };
-            tilt.style.setProperty("--room-w", `${room.w}px`);
-            tilt.style.setProperty("--room-h", `${room.h}px`);
+            tilt.style.setProperty("--room-k", `${k}`);
             tilt.style.setProperty("--room-x", `${room.x}px`);
             tilt.style.setProperty("--room-y", `${room.y}px`);
             return room;
@@ -111,21 +110,27 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             return;
         }
 
+        // lighting layers, animated by opacity (GPU) instead of CSS variables (repaint)
+        const grade = rack.querySelector(".rack-grade");
+        const lamp = rack.querySelectorAll(".rack-light, .rack-rim");
+
         gsap.timeline({
-            delay: 0.7, // let the loader fade out first
-            defaults: { ease: "power3.inOut" },
+            delay: 0.35, // let the loader fade out first
             onComplete: () => { document.documentElement.style.overflow = ""; },
         })
-            .to(tilt, { scale: 1, y: 0, duration: 2.6 }, 0.2)
-            .to(fg, { yPercent: 35, scale: 1.3, autoAlpha: 0, duration: 1.4, ease: "power2.in" }, 0.4)
+            // the push in
+            .to(tilt, { scale: 1, y: 0, duration: 2.1, ease: "power2.inOut" }, 0)
+            // chair slides out first
+            .to(fg, { yPercent: 35, scale: 1.3, autoAlpha: 0, duration: 1.1, ease: "power2.in" }, 0.15)
             // swap: HTML rack fades in exactly as the painted one fades out
-            .to(rack, { autoAlpha: 1, duration: 0.6, ease: "power1.inOut" }, 1.2)
-            .to(desk, { autoAlpha: 0, duration: 0.6, ease: "power1.inOut" }, 1.2)
-            // then the rest of the room goes
-            // focus pull: room goes soft and a bit darker instead of disappearing
-            .to(blur, { autoAlpha: 1, duration: 1.2, ease: "power1.inOut" }, 1.5)
-            .to(fairy, { autoAlpha: 0.35, duration: 1.2 }, 1.5)
-            .to(rack, { ...LOOK_FINAL, duration: 1.2 }, 1.7);
+            .to(rack, { autoAlpha: 1, duration: 0.5, ease: "power1.inOut" }, 0.9)
+            .to(desk, { autoAlpha: 0, duration: 0.5, ease: "power1.inOut" }, 0.9)
+            // focus pull: room goes soft and darker
+            .to(blur, { autoAlpha: 1, duration: 1, ease: "power1.inOut" }, 1.1)
+            .to(fairy, { autoAlpha: 0.35, duration: 1 }, 1.1)
+            // ease the lighting into the zoomed-in look
+            .to(grade, { opacity: LOOK_FINAL["--grade"], duration: 1 }, 1.2)
+            .to(lamp, { opacity: LOOK_FINAL["--lamp"], duration: 1 }, 1.2);
 
         return () => { document.documentElement.style.overflow = ""; };
     }, { scope, dependencies: [ready], revertOnUpdate: true });

@@ -2,13 +2,17 @@
     position: relative;
 }
 
-/* sized and positioned from JS so the desk spot lines up under the rack */
+/* room is drawn at its real image size (1672x940) and scaled up with a
+   transform, which the graphics card handles cheaply */
 .room {
     position: absolute;
     left: var(--room-x, 0);
     top: var(--room-y, 0);
-    width: var(--room-w, 0);
-    height: var(--room-h, 0);
+    width: 1672px;
+    height: 940px;
+    transform-origin: 0 0;
+    transform: scale(var(--room-k, 1));
+    will-change: transform;
     pointer-events: none;
 }
 
@@ -145,7 +149,6 @@
     translate: -50% -50%;
     border-radius: 50%;
     background: radial-gradient(closest-side, rgba(255, 205, 130, .6), rgba(255, 170, 80, .18) 45%, transparent);
-    mix-blend-mode: screen;
     animation: twinkle 2.6s ease-in-out infinite;
 }
 
