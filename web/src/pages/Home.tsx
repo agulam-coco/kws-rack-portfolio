@@ -1,16 +1,20 @@
+import { useRef } from "react";
 import Rack from "../components/Rack";
-import { stages } from "../data/site";
+import { useRackCamera } from "../hooks/useRackCamera";
+import { useLenis } from "../hooks/useLenis";
 
 export default function Home() {
-    const s = stages[0]; // becomes dynamic while scrolling
+    const scene = useRef<HTMLElement>(null);
+    useLenis();
+    useRackCamera(scene);
+
     return (
-        <main className="home">
-            <div className="rack-col"><Rack /></div>
-            <aside className="captions">
-                <p className="cap-label">{s.label}</p>
-                <h2 className="cap-title">{s.title}</h2>
-                <p className="cap-body">{s.body}</p>
-            </aside>
+        <main ref={scene} className="scene">
+            <div className="viewport">
+                <div className="camera">
+                    <Rack />
+                </div>
+            </div>
         </main>
     );
 }

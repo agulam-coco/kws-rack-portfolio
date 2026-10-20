@@ -10,6 +10,7 @@ export default function Rack() {
     return (
         <div className="rack">
             <span className="rail l" /><span className="rail r" />
+            <span className="rack-side" />
             <HeroFrame />
             <SwitchUnit />
             <NowDisplay />

@@ -1,4 +1,5 @@
 @import "./rack.css";
+@import "./rack-3d.css";
 
 :root {
     --bg: #121110;
