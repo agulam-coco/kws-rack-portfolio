@@ -3,6 +3,8 @@ const IMAGES = [
   "/media/room/room-desk.png",
   "/media/room/room-desk-empty.png",
   "/media/room/room-fg.png",
+  "/media/room/room-bg-blur.webp",
+  "/media/room/room-desk-empty-blur.webp",
 ];
 
 const FONTS = [

@@ -11,12 +11,7 @@ const FILL = 0.58;
 
 // Color grade, lamp, and side panel: room look vs zoomed-in look.
 const LOOK_ROOM = { "--grade": 0.65, "--lamp": 1, "--side": 1 };
-const LOOK_FINAL = { "--grade": 0.18, "--lamp": 0.35, "--side": 0 };
-
-// When the HTML rack fades in over the painted one (seconds into the intro).
-// Set to 10 to check alignment: the intro finishes on the painted rack,
-// then the HTML rack pops in. If it jumps, nudge the numbers in room.ts.
-const SWAP_AT = 1.2;
+const LOOK_FINAL = { "--grade": 0.3, "--lamp": 0.6, "--side": 1 };
 
 export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boolean) {
     useGSAP(() => {
@@ -25,11 +20,10 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         const camera = root.querySelector<HTMLElement>(".camera")!;
         const tilt = root.querySelector<HTMLElement>(".tilt")!;
         const rack = root.querySelector<HTMLElement>(".rack")!;
-        const bg = root.querySelector<HTMLImageElement>(".room-bg")!;
         const desk = root.querySelector<HTMLImageElement>(".room-desk")!;
         const fg = root.querySelector<HTMLImageElement>(".room-fg")!;
         const fairy = root.querySelector<HTMLElement>(".fairy")!;
-        const deskEmpty = root.querySelector<HTMLImageElement>(".room-desk-empty")!;
+        const blur = root.querySelectorAll<HTMLImageElement>(".room-bg-blur, .room-desk-empty-blur");
         const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         // still loading: keep everything hidden and the page locked
@@ -65,6 +59,7 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         gsap.set(camera, { transformOrigin: "50% 0" });
         gsap.set(tilt, { transformOrigin: "50% 0" });
         gsap.set(fg, { transformOrigin: "50% 100%" });
+        gsap.set(blur, { autoAlpha: reduce ? 1 : 0 });
 
         // ---------- scroll: pan from unit to unit ----------
         const tl = gsap.timeline({
@@ -88,7 +83,8 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
 
         if (reduce) {
             placeRoom();
-            gsap.set([bg, desk, deskEmpty, fg, fairy], { autoAlpha: 0 });
+            gsap.set([desk, fg], { autoAlpha: 0 });
+            gsap.set(fairy, { autoAlpha: 0.35 });
             gsap.set(rack, { ...LOOK_FINAL, autoAlpha: 1 });
             gsap.set(tilt, { autoAlpha: 1 });
             document.documentElement.style.overflow = "";
@@ -126,7 +122,9 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             .to(rack, { autoAlpha: 1, duration: 0.6, ease: "power1.inOut" }, 1.2)
             .to(desk, { autoAlpha: 0, duration: 0.6, ease: "power1.inOut" }, 1.2)
             // then the rest of the room goes
-            .to([bg, deskEmpty, fairy], { autoAlpha: 0, duration: 1, ease: "power1.in" }, 1.7)
+            // focus pull: room goes soft and a bit darker instead of disappearing
+            .to(blur, { autoAlpha: 1, duration: 1.2, ease: "power1.inOut" }, 1.5)
+            .to(fairy, { autoAlpha: 0.35, duration: 1.2 }, 1.5)
             .to(rack, { ...LOOK_FINAL, duration: 1.2 }, 1.7);
 
         return () => { document.documentElement.style.overflow = ""; };
