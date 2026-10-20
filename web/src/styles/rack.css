@@ -237,7 +237,7 @@
 .node {
     position: relative;
     width: 74px;
-    height: 290px;
+    height: 220px;
     display: flex;
     flex-direction: column;
     border-radius: 3px;
@@ -275,7 +275,7 @@
     left: 9px;
     writing-mode: vertical-rl;
     rotate: 180deg;
-    max-height: 120px;
+    max-height: 90px;
     font: 600 9px var(--font-display);
     letter-spacing: .06em;
     color: #eaeaea;
@@ -476,7 +476,7 @@
 
 /* ---------- bottom panel ---------- */
 .bottom {
-    height: 220px;
+    height: 305px;
     padding-bottom: 28px;
 }
 

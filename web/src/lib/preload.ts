@@ -1,6 +1,7 @@
 const IMAGES = [
   "/media/room/room-bg.png",
   "/media/room/room-desk.png",
+  "/media/room/room-desk-empty.png",
   "/media/room/room-fg.png",
 ];
 
@@ -36,9 +37,9 @@ export async function preloadAll(onProgress: (p: number) => void) {
     ...IMAGES.map((src) => {
       const img = new Image();
       img.src = src;
-      return img.decode().catch(() => {});
+      return img.decode().catch(() => { });
     }),
-    ...FONTS.map((f) => document.fonts.load(f).catch(() => {})),
+    ...FONTS.map((f) => document.fonts.load(f).catch(() => { })),
     makeNoise().then((url) =>
       document.documentElement.style.setProperty("--noise", `url(${url})`)
     ),

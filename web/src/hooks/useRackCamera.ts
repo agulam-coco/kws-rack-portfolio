@@ -29,6 +29,7 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         const desk = root.querySelector<HTMLImageElement>(".room-desk")!;
         const fg = root.querySelector<HTMLImageElement>(".room-fg")!;
         const fairy = root.querySelector<HTMLElement>(".fairy")!;
+        const deskEmpty = root.querySelector<HTMLImageElement>(".room-desk-empty")!;
         const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         // still loading: keep everything hidden and the page locked
@@ -87,7 +88,7 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
 
         if (reduce) {
             placeRoom();
-            gsap.set([bg, desk, fg, fairy], { autoAlpha: 0 });
+            gsap.set([bg, desk, deskEmpty, fg, fairy], { autoAlpha: 0 });
             gsap.set(rack, { ...LOOK_FINAL, autoAlpha: 1 });
             gsap.set(tilt, { autoAlpha: 1 });
             document.documentElement.style.overflow = "";
@@ -105,6 +106,15 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         gsap.set(tilt, { scale: s0 / z, y: (y0 - yc) / z, autoAlpha: 1 });
         gsap.set(rack, { ...LOOK_ROOM, autoAlpha: 0 }); // painted rack shows first
 
+        // ---------- alignment check: visit /?align ----------
+        // freezes on the room shot with the HTML rack half see-through
+        // over the painted one. If they don't line up, adjust room.ts.
+        if (new URLSearchParams(location.search).has("align")) {
+            gsap.set(rack, { ...LOOK_ROOM, autoAlpha: 0.5 });
+            gsap.set(fg, { autoAlpha: 0 });
+            return;
+        }
+
         gsap.timeline({
             delay: 0.7, // let the loader fade out first
             defaults: { ease: "power3.inOut" },
@@ -112,9 +122,12 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         })
             .to(tilt, { scale: 1, y: 0, duration: 2.6 }, 0.2)
             .to(fg, { yPercent: 35, scale: 1.3, autoAlpha: 0, duration: 1.4, ease: "power2.in" }, 0.4)
-            .to(rack, { autoAlpha: 1, duration: 0.9, ease: "power1.inOut" }, SWAP_AT)
-            .to([bg, desk, fairy], { autoAlpha: 0, duration: 1, ease: "power1.in" }, Math.max(1.7, SWAP_AT + 0.5))
-            .to(rack, { ...LOOK_FINAL, duration: 1.2 }, Math.max(1.7, SWAP_AT + 0.5));
+            // swap: HTML rack fades in exactly as the painted one fades out
+            .to(rack, { autoAlpha: 1, duration: 0.6, ease: "power1.inOut" }, 1.2)
+            .to(desk, { autoAlpha: 0, duration: 0.6, ease: "power1.inOut" }, 1.2)
+            // then the rest of the room goes
+            .to([bg, deskEmpty, fairy], { autoAlpha: 0, duration: 1, ease: "power1.in" }, 1.7)
+            .to(rack, { ...LOOK_FINAL, duration: 1.2 }, 1.7);
 
         return () => { document.documentElement.style.overflow = ""; };
     }, { scope, dependencies: [ready], revertOnUpdate: true });
