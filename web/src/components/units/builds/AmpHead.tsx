@@ -1,12 +1,15 @@
-export default function AmpHead({ color }: { color: string }) {
+import type { Project } from "../../../data/projects";
+import ProjectTarget from "../../project/ProjectTarget";
+
+export default function AmpHead({ project }: { project: Project }) {
     return (
-        <div className="amp" style={{ "--accent": color } as React.CSSProperties}>
-            <div className="grille-cloth" />
-            <div className="knobs">
+        <ProjectTarget project={project} className="amp" style={{ "--accent": project.color } as React.CSSProperties}>
+            <span className="grille-cloth" />
+            <span className="knobs">
                 {[0, 1, 2, 3, 4].map((i) => <span key={i} className="knob" />)}
                 <i className="jewel" />
-            </div>
+            </span>
             <span className="unit-label">GUITARS</span>
-        </div>
+        </ProjectTarget>
     );
 }

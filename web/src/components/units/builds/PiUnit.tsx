@@ -1,19 +1,22 @@
-export default function PiUnit({ color }: { color: string }) {
+import type { Project } from "../../../data/projects";
+import ProjectTarget from "../../project/ProjectTarget";
+
+export default function PiUnit({ project }: { project: Project }) {
     return (
-        <div className="pi" style={{ "--accent": color } as React.CSSProperties}>
+        <ProjectTarget project={project} className="pi" style={{ "--accent": project.color } as React.CSSProperties}>
             <span className="rj45" data-jack="builds" />
-            <div className="pi-face">
-                <div className="pi-vents" />
-                <div className="oled">
+            <span className="pi-face">
+                <span className="pi-vents" />
+                <span className="oled">
                     <b>otter</b>
                     <span>up 12d · 41°C</span>
-                </div>
-                <div className="pi-leds">
+                </span>
+                <span className="pi-leds">
                     <i className="led" />
                     <i className="led act" />
-                </div>
-            </div>
+                </span>
+            </span>
             <span className="unit-label">SERVER RACK</span>
-        </div>
+        </ProjectTarget>
     );
 }

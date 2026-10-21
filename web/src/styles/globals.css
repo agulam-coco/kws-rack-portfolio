@@ -3,6 +3,7 @@
 @import "./room.css";
 @import "./loader.css";
 @import "./cables.css";
+@import "./preview.css";
 
 :root {
     --bg: #121110;

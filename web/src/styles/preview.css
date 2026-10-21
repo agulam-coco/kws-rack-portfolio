@@ -1,0 +1,172 @@
+/* ---------- clickable rack units ---------- */
+.project-target {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* the inner parts were divs; as spans inside a link they need to stay blocks */
+.project-target .node-top,
+.project-target .node-bottom,
+.project-target .grille-cloth,
+.project-target .pi-face,
+.project-target .pi-vents,
+.project-target .oled {
+    display: block;
+}
+
+.project-target .node-bottom {
+    display: flex;
+}
+
+.project-target .knobs {
+    display: flex;
+}
+
+.project-target .pi-face {
+    display: grid;
+}
+
+.project-target .pi-leds {
+    display: flex;
+}
+
+.project-target:focus-visible {
+    outline: 2px solid var(--led);
+    outline-offset: 3px;
+}
+
+.amp,
+.pi {
+    transition: transform .25s, box-shadow .25s;
+}
+
+.amp.project-target:hover,
+.pi.project-target:hover,
+.amp.project-target:focus-visible,
+.pi.project-target:focus-visible {
+    transform: translateZ(6px) translateY(-3px);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent), 0 10px 20px rgba(0, 0, 0, .5);
+}
+
+/* ---------- hover card ---------- */
+.preview-layer {
+    z-index: 60;
+}
+
+/* above the grain */
+
+.preview-card {
+    width: min(300px, calc((100vw - 58vw) / 2 - 44px));
+    min-width: 240px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1c1b19;
+    border: 1px solid #34302b;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .03) inset;
+    color: var(--text);
+    font-family: var(--font-display);
+    animation: pc-in .18s ease-out;
+}
+
+@keyframes pc-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(.98);
+    }
+}
+
+.pc-media {
+    aspect-ratio: 16 / 9;
+    background: #12110f;
+    border-bottom: 1px solid #2b2824;
+}
+
+.pc-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.pc-placeholder {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(120% 90% at 20% 0%, color-mix(in srgb, var(--accent) 35%, transparent), transparent 60%),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, .03) 0 1px, transparent 1px 4px),
+        #161513;
+}
+
+.pc-placeholder span {
+    font: 600 13px var(--font-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    opacity: .7;
+}
+
+.pc-body {
+    padding: 16px 18px 6px;
+}
+
+.pc-title {
+    margin: 0;
+    font-size: 20px;
+}
+
+.pc-event {
+    margin: 4px 0 0;
+    font: 11px var(--font-mono);
+    color: var(--muted);
+}
+
+.pc-summary {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #d8d1c6;
+}
+
+.pc-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0;
+    margin: 12px 0 0;
+}
+
+.pc-tags li {
+    font: 11px var(--font-mono);
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--accent) 55%, #3a352f);
+    color: #e9e2d6;
+}
+
+.pc-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 18px 16px;
+}
+
+.pc-actions a {
+    font: 500 13px var(--font-mono);
+    text-decoration: none;
+    padding: 4px 0;
+}
+
+.pc-primary {
+    color: var(--led);
+}
+
+.pc-secondary {
+    color: var(--muted);
+}
+
+.pc-actions a:hover {
+    text-decoration: underline;
+}
