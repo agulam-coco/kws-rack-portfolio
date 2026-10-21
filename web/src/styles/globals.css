@@ -4,6 +4,7 @@
 @import "./loader.css";
 @import "./cables.css";
 @import "./preview.css";
+@import "./hud.css";
 
 :root {
     --bg: #121110;

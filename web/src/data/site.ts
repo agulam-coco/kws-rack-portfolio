@@ -4,6 +4,16 @@ export const person = {
     email: "chigabat@grinnell.edu",
     linkedin: "https://linkedin.com/in/jason-chigabatia",
     github: "https://github.com/agulam-coco",
+
+};
+
+// Short intro under your name in the top-left corner. Keep it to 2 or 3 short
+// paragraphs so it never runs into the section rail.
+export const about = {
+    paragraphs: [
+        "I build software, and lately a lot of it runs on hardware I can hold: tiny screens, a Pi in my dorm, and this rack.",
+        "At Grinnell I study CS and Linguistics, run Freesound, and do outreach for ColorStack.",
+    ],
 };
 
 export const stages = [

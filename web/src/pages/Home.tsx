@@ -5,6 +5,7 @@ import Loader from "../components/Loader";
 import { useRackCamera } from "../hooks/useRackCamera";
 import { useLenis } from "../hooks/useLenis";
 import { preloadAll } from "../lib/preload";
+import Hud from "../components/Hud";
 
 export default function Home() {
     const scene = useRef<HTMLElement>(null);
@@ -32,6 +33,7 @@ export default function Home() {
                     </div>
                 </div>
             </main>
+            <Hud show={ready} />
             <div className="grain" aria-hidden />
 
         </>

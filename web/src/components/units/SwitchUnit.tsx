@@ -1,5 +1,5 @@
-import { ports, stages } from "../../data/site";
-import { cameraState } from "../../lib/cameraState";
+import { ports } from "../../data/site";
+import { jumpTo } from "../../lib/cameraState";
 
 type Port = (typeof ports)[number];
 
@@ -12,14 +12,7 @@ export default function SwitchUnit() {
         btn.classList.add("is-firing");
 
         if (p.cable === "") return; // spare port: blinks, goes nowhere
-
-        // longer trips take a little longer, so far jumps don't feel like teleports
-        const from = Math.round(cameraState.progress * (stages.length - 1));
-        const to = stages.findIndex((s) => s.id === p.stage);
-        const duration = Math.min(2.2, 0.9 + 0.25 * Math.abs(to - from));
-
-        cameraState.goTo(p.stage, duration);
-        cameraState.firePacket(p.cable, duration);
+        jumpTo(p.stage, p.cable);
     };
 
     return (

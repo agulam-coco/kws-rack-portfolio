@@ -1,0 +1,161 @@
+/* ---------- corner text + section rail ---------- */
+.hud {
+    --row: 30px;
+    /* keep in sync with ROW in Hud.tsx */
+    position: fixed;
+    inset: 32px auto 32px 36px;
+    z-index: 55;
+    /* above the grain, below hover cards */
+    pointer-events: none;
+
+    /* hidden until the intro push-in is done */
+    opacity: 0;
+    transition: opacity .8s ease;
+}
+
+.hud.is-on {
+    opacity: 1;
+    transition-delay: 2.3s;
+    /* roughly when the camera lands */
+}
+
+.hud.is-on .hud-rail {
+    pointer-events: auto;
+}
+
+/* name, top left */
+.hud-who {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.7;
+    letter-spacing: .04em;
+    color: var(--muted);
+}
+
+.hud-who b {
+    display: block;
+    color: var(--text);
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+
+/* short about, under the name */
+.hud-intro {
+    pointer-events: auto;
+    /* fits in the gap left of the rack (the rack is 58% of the screen wide) */
+    width: clamp(180px, calc(21vw - 70px), 250px);
+}
+
+.hud-about {
+    margin-top: 16px;
+    font-family: "Outfit", system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+    color: rgba(236, 230, 220, .62);
+}
+
+.hud-about p {
+    margin: 0 0 10px;
+}
+
+.hud-about p:last-child {
+    margin-bottom: 0;
+}
+
+/* rail, bottom left */
+.hud-rail {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    padding-left: 14px;
+}
+
+/* the hairline the marker rides on */
+.hud-rail::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: calc(var(--row) / 2);
+    bottom: calc(var(--row) / 2);
+    width: 1px;
+    background: rgba(236, 230, 220, .14);
+}
+
+.hud-marker {
+    position: absolute;
+    left: -1px;
+    top: calc(var(--row) / 2 - 7px);
+    width: 3px;
+    height: 14px;
+    border-radius: 2px;
+    background: var(--led);
+    box-shadow: 0 0 10px rgba(93, 255, 138, .6);
+    will-change: transform;
+}
+
+.hud-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: var(--row);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: rgba(236, 230, 220, .32);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    cursor: pointer;
+    transition: color .3s ease;
+}
+
+.hud-name {
+    text-transform: lowercase;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity .3s ease, transform .3s ease;
+}
+
+.hud-row:hover,
+.hud-row:focus-visible {
+    color: rgba(236, 230, 220, .7);
+    outline: none;
+}
+
+.hud-row.is-active {
+    color: var(--text);
+}
+
+.hud-row:hover .hud-name,
+.hud-row:focus-visible .hud-name,
+.hud-row.is-active .hud-name {
+    opacity: 1;
+    transform: none;
+}
+
+/* phones get their own layout in phase C */
+@media (max-width: 1000px) {
+    .hud {
+        display: none;
+    }
+}
+
+/* short screens: drop the about so it can't hit the rail */
+@media (max-height: 640px) {
+    .hud-about {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .hud,
+    .hud.is-on {
+        transition: none;
+    }
+
+}

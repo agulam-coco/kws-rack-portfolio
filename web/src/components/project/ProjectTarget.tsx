@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode }
 import { Link } from "react-router";
 import {
   useFloating, useHover, useFocus, useDismiss, useRole, useInteractions,
-  safePolygon, offset, flip, shift, autoUpdate, FloatingPortal,
+  safePolygon, offset, shift, autoUpdate, FloatingPortal,
 } from "@floating-ui/react";
 import { primaryAction, type Project } from "../../data/projects";
 import PreviewCard from "./PreviewCard";
@@ -38,8 +38,7 @@ export default function ProjectTarget({ project, className, style, children }: {
     onOpenChange: setOpen,
     placement: "right",
     strategy: "fixed",
-    middleware: [offset(28), flip({ fallbackPlacements: ["left"] }), shift({ padding: 16 })],
-    // follow the unit while the camera moves it
+    middleware: [offset(28), shift({ padding: 16, crossAxis: true })],    // follow the unit while the camera moves it
     whileElementsMounted: (ref, float, update) => autoUpdate(ref, float, update, { animationFrame: true }),
   });
 
