@@ -4,7 +4,8 @@ import {
   useFloating, useHover, useFocus, useDismiss, useRole, useInteractions,
   safePolygon, offset, shift, autoUpdate, FloatingPortal,
 } from "@floating-ui/react";
-import { primaryAction, type Project } from "../../data/projects";
+import { previewImages, type Project } from "../../data/projects";
+import { primaryAction } from "../../lib/writeups";
 import PreviewCard from "./PreviewCard";
 
 // Wraps a rack unit (node, amp, Pi) so it's a real link with a hover card.

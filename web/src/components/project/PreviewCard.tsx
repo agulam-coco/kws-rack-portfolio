@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { primaryAction, hasWriteup, previewImages, type Project } from "../../data/projects";
+import { previewImages, type Project } from "../../data/projects";
+import { primaryAction } from "../../lib/writeups";
 
 export default function PreviewCard({ project }: { project: Project }) {
     const action = primaryAction(project);
-    const showReadMore = project.readMore && action.external;
 
     // try each image in order; if one fails to load, use the next.
     // if none work, the placeholder shows instead.
@@ -37,8 +37,6 @@ export default function PreviewCard({ project }: { project: Project }) {
                     <a className="pc-primary" href={action.href} target="_blank" rel="noopener noreferrer">{action.label}</a>
                 ) : (
                     <Link className="pc-primary" to={action.href} target="_blank" rel="noopener noreferrer">{action.label}</Link>)}
-                {showReadMore && hasWriteup(project) && (
-                    <Link className="pc-secondary" to={`/projects/${project.id}`} target="_blank" rel="noopener noreferrer">Read the write-up →</Link>)}
             </div>
         </div>
     );

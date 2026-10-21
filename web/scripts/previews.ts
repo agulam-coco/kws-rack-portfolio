@@ -5,7 +5,7 @@
 import { chromium } from "playwright";
 import { mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { projects } from "../src/data/projects.ts";
+import { projects, repoOf } from "../src/data/projects.ts";
 
 const OUT = fileURLToPath(new URL("../public/media/previews/", import.meta.url));
 const MAP = fileURLToPath(new URL("../src/data/previews.generated.ts", import.meta.url));
@@ -16,9 +16,10 @@ await mkdir(OUT, { recursive: true });
 
 // ---------- 1. custom GitHub social previews ----------
 for (const p of projects) {
-    if (!p.repo) continue;
+    const repo = repoOf(p);
+    if (!repo) continue;
     try {
-        const html = await (await fetch(`${GITHUB}/${p.repo}`, { headers: { "User-Agent": "Mozilla/5.0" } })).text();
+        const html = await (await fetch(`${GITHUB}/${repo}`, { headers: { "User-Agent": "Mozilla/5.0" } })).text();
         const url = html.match(/<meta property="og:image" content="([^"]+)"/)?.[1];
         // custom uploads live on repository-images.githubusercontent.com;
         // anything else is GitHub's auto-generated card, which the site already falls back to
@@ -38,8 +39,7 @@ for (const p of projects) {
 
 // ---------- 2. screenshots of live sites ----------
 const live = projects.flatMap((p) =>
-    p.action.type === "external" && p.action.label === "Live" ? [{ id: p.id, name: p.name, url: p.action.href }] : []
-);
+    p.links?.live ? [{ id: p.id, name: p.name, url: p.links.live }] : []);
 if (live.length) {
     const browser = await chromium.launch();
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 } }); // 16:9 like the card

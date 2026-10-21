@@ -1,0 +1,179 @@
+/* ---------- write-up pages (/projects/:slug) ---------- */
+.writeup {
+    --accent: var(--led);
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 24px 120px;
+}
+
+.wu-back {
+    font: 12px var(--font-mono);
+    color: var(--muted);
+    text-decoration: none;
+    transition: color .2s;
+}
+
+.wu-back:hover,
+.wu-back:focus-visible {
+    color: var(--text);
+}
+
+/* ----- header ----- */
+.wu-head {
+    margin: 56px 0 48px;
+    padding-left: 18px;
+    border-left: 3px solid var(--accent);
+}
+
+.wu-event {
+    margin: 0 0 10px;
+    font: 12px var(--font-mono);
+    letter-spacing: .08em;
+    color: var(--accent);
+}
+
+.wu-head h1 {
+    margin: 0;
+    font-size: clamp(36px, 6vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -.01em;
+}
+
+.wu-summary {
+    margin: 14px 0 0;
+    font: 18px/1.5 "Outfit", system-ui, sans-serif;
+    color: rgba(236, 230, 220, .75);
+}
+
+.wu-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.wu-tags li {
+    padding: 3px 9px;
+    border: 1px solid #3a352f;
+    border-radius: 999px;
+    font: 11px var(--font-mono);
+    color: var(--muted);
+}
+
+.wu-links {
+    display: flex;
+    gap: 8px;
+    margin: 22px 0 0;
+}
+
+.wu-links a {
+    padding: 7px 13px;
+    border: 1px solid rgba(236, 230, 220, .18);
+    border-radius: 4px;
+    font: 12px var(--font-mono);
+    text-decoration: none;
+    transition: border-color .2s, color .2s;
+}
+
+.wu-links a:hover,
+.wu-links a:focus-visible {
+    border-color: var(--accent);
+    color: var(--accent);
+    outline: none;
+}
+
+/* ----- the MDX body ----- */
+.wu-body {
+    font: 17px/1.7 "Outfit", system-ui, sans-serif;
+    color: rgba(236, 230, 220, .86);
+}
+
+.wu-body> :first-child {
+    margin-top: 0;
+}
+
+.wu-body h2 {
+    margin: 52px 0 12px;
+    font-size: 24px;
+    color: var(--text);
+}
+
+.wu-body h3 {
+    margin: 36px 0 8px;
+    font-size: 18px;
+    color: var(--text);
+}
+
+.wu-body p,
+.wu-body ul,
+.wu-body ol {
+    margin: 0 0 18px;
+}
+
+.wu-body li {
+    margin-bottom: 6px;
+}
+
+.wu-body a {
+    color: var(--text);
+    text-decoration-color: var(--accent);
+    text-underline-offset: 3px;
+}
+
+.wu-body strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.wu-body img,
+.wu-body video {
+    display: block;
+    width: 100%;
+    margin: 28px 0;
+    border-radius: 8px;
+    border: 1px solid #2b2824;
+}
+
+.wu-body blockquote {
+    margin: 28px 0;
+    padding-left: 16px;
+    border-left: 2px solid var(--accent);
+    color: rgba(236, 230, 220, .7);
+}
+
+.wu-body code {
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: #1c1b19;
+    font: .86em var(--font-mono);
+}
+
+.wu-body pre {
+    margin: 24px 0;
+    padding: 16px 18px;
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #2b2824;
+    background: #161513;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.wu-body pre code {
+    padding: 0;
+    background: none;
+}
+
+.wu-body hr {
+    margin: 48px 0;
+    border: 0;
+    border-top: 1px dashed #3a352f;
+}
+
+.wu-soon {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--muted);
+}

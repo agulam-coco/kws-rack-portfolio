@@ -5,6 +5,7 @@
 @import "./cables.css";
 @import "./preview.css";
 @import "./hud.css";
+@import "./writeup.css";
 
 :root {
     --bg: #121110;
