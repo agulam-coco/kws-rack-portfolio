@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { ports } from "../data/site";
+import { ports, stages } from "../data/site";
+import { cameraState } from "../lib/cameraState";
 
 // One cable per port (HOME and the spare SFP have none).
 // Port order left to right = lane order in the bundle = exit order top to bottom.
@@ -18,6 +19,20 @@ const COLOR: Record<string, [string, string]> = { fissure: GREEN };
 const GAP = 4.3;   // spacing between cables in the bundle
 const BOOT = 11;   // length of the rubber boot behind each plug
 const LIFT = -8;   // must match the translateY in .node:hover (rack-3d.css)
+
+// ---------- packets ----------
+const POOL = 8;            // max packets on one cable at once
+const FULL_SPEED = 2600;   // scroll speed (px/s) that counts as "flat out"
+
+// which cables carry the traffic when you're heading to each stage
+const STAGE_CABLES: Record<string, string[]> = {
+    overview: [],
+    network: IDS,
+    now: ["about"],
+    projects: ["watch-my-tokens", "fissure", "freesound"],
+    builds: ["builds"],
+    contact: ["contact"],
+};
 
 type Pt = [number, number];
 type Plug = { x: number; y: number; flip: boolean };
@@ -183,6 +198,99 @@ export default function Cables() {
         return () => offs.forEach((f) => f());
     }, [state.cables]);
 
+    // ---------- packets: speed and direction follow your scrolling ----------
+    useLayoutEffect(() => {
+        const root = svg.current;
+        if (!root || !state.cables.length) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        type Packet = { g: SVGGElement; halo: SVGPathElement; trail: SVGPathElement; head: SVGPathElement; alive: boolean; pos: number; speed: number; dir: 1 | -1; len: number };
+        const lines = state.cables.map((c) => {
+            const g = root.querySelector<SVGGElement>(`[data-cable="${c.id}"]`)!;
+            const body = g.querySelector<SVGPathElement>(".cable-edge")!;
+            const packets: Packet[] = [...g.querySelectorAll<SVGGElement>(".packet")].map((p) => ({
+                g: p,
+                halo: p.querySelector<SVGPathElement>(".packet-halo")!,
+                trail: p.querySelector<SVGPathElement>(".packet-trail")!,
+                head: p.querySelector<SVGPathElement>(".packet-head")!,
+                alive: false, pos: 0, speed: 0, dir: 1, len: 0,
+            }));
+            return { id: c.id, g, body, packets, L: body.getTotalLength(), acc: Math.random() };
+        });
+
+        let lastY = window.scrollY, v = 0, frame = 0, hot = "";
+
+        const dash = (el: SVGPathElement, from: number, to: number, L: number) => {
+            el.style.strokeDasharray = `${Math.max(0.1, to - from)} ${L + 200}`;
+            el.style.strokeDashoffset = `${-from}`;
+        };
+
+        const tick = (_t: number, deltaMs: number) => {
+            const dt = Math.min(deltaMs, 50) / 1000;
+            if (!dt) return;
+
+            // scroll velocity, smoothed
+            const y = window.scrollY;
+            v += ((y - lastY) / dt - v) * 0.12;
+            lastY = y;
+            const speedT = Math.min(1, Math.abs(v) / FULL_SPEED);
+            const dir: 1 | -1 = v < -15 ? -1 : 1;
+
+            // the stage you're heading toward
+            const idx = cameraState.progress * (stages.length - 1);
+            const target = Math.abs(v) > 20 ? (dir > 0 ? Math.ceil(idx - 0.02) : Math.floor(idx + 0.02)) : Math.round(idx);
+            const stageId = stages[Math.max(0, Math.min(stages.length - 1, target))].id;
+            const active = new Set(STAGE_CABLES[stageId] ?? []);
+
+            // light up the cables that lead there while you're scrolling
+            const moving = speedT > 0.02;
+            const key = [...active].join() + moving;
+            if (key !== hot) {
+                hot = key;
+                lines.forEach((l) => l.g.classList.toggle("is-hot", moving && active.has(l.id)));
+            }
+
+            if (++frame % 30 === 0) lines.forEach((l) => (l.L = l.body.getTotalLength())); // hover can stretch a cable
+
+            for (const l of lines) {
+                const on = active.has(l.id);
+                // packets per second on this cable
+                const rate = on ? 0.3 + speedT * 9 : 0.08 + speedT * 1.4;
+                l.acc += rate * dt;
+
+                while (l.acc >= 1) {
+                    l.acc -= 1;
+                    const p = l.packets.find((q) => !q.alive);
+                    if (!p) break;
+                    p.alive = true;
+                    p.dir = dir;
+                    p.speed = (160 + speedT * 1300) * (0.85 + Math.random() * 0.3);
+                    p.len = 8 + speedT * 70;               // longer trails when you scroll fast
+                    p.pos = dir > 0 ? 0 : l.L;
+                    p.g.style.opacity = "1";
+                }
+
+                for (const p of l.packets) {
+                    if (!p.alive) continue;
+                    p.pos += p.speed * p.dir * dt;
+                    const head = p.pos, tail = p.pos - p.len * p.dir;
+                    const a = Math.min(head, tail), b = Math.max(head, tail);
+                    dash(p.trail, a, b, l.L);
+                    const h0 = p.dir > 0 ? head - 5 : head, h1 = p.dir > 0 ? head : head + 5;
+                    dash(p.head, h0, h1, l.L);
+                    dash(p.halo, h0 - 3, h1 + 3, l.L);
+                    if (p.pos > l.L + p.len || p.pos < -p.len) {
+                        p.alive = false;
+                        p.g.style.opacity = "0";
+                    }
+                }
+            }
+        };
+
+        gsap.ticker.add(tick);
+        return () => gsap.ticker.remove(tick);
+    }, [state.cables]);
+
     const { w, h, cables, rings, straps } = state;
     return (
         <svg ref={svg} className="cables" width={w} height={h} aria-hidden>
@@ -195,9 +303,17 @@ export default function Cables() {
                 const b = c.build(0);
                 return (
                     <g key={c.id} className="cable" data-cable={c.id}>
-                        <path d={b.d} stroke={c.color[1]} strokeWidth={4.8} />
+                        <path className="cable-glow" d={b.d} stroke={c.color[0]} />
+                        <path className="cable-edge" d={b.d} stroke={c.color[1]} strokeWidth={4.8} />
                         <path d={b.d} stroke={c.color[0]} strokeWidth={3.4} />
                         <path className="cable-shine" d={b.d} />
+                        {Array.from({ length: POOL }, (_, i) => (
+                            <g key={i} className="packet">
+                                <path className="packet-halo" d={b.d} />
+                                <path className="packet-trail" d={b.d} />
+                                <path className="packet-head" d={b.d} />
+                            </g>
+                        ))}
                     </g>
                 );
             })}

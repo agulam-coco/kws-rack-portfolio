@@ -64,3 +64,45 @@
     fill: rgba(255, 255, 255, .14);
     filter: none;
 }
+
+/* the cables leading where you're scrolling glow a little */
+.cable-glow {
+    stroke-width: 10;
+    opacity: 0;
+    transition: opacity .4s;
+}
+
+.cable.is-hot .cable-glow {
+    opacity: .28;
+}
+
+/* packets: a soft halo, a fading trail, and a bright head */
+.packet {
+    opacity: 0;
+}
+
+.packet path {
+    stroke-dasharray: 0 99999;
+}
+
+/* same green as the LEDs and the LCD, so data reads as "the rack talking" */
+.packet-halo {
+    stroke: rgba(93, 255, 138, .38);
+    stroke-width: 13;
+}
+
+.packet-trail {
+    stroke: rgba(150, 255, 180, .8);
+    stroke-width: 2.8;
+}
+
+.packet-head {
+    stroke: #f0fff4;
+    stroke-width: 4.2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .packet {
+        display: none;
+    }
+}

@@ -48,3 +48,18 @@ export const projects: Project[] = [
 export const nodes = projects.filter((p) => p.shelf === "nodes");
 export const builds = projects.filter((p) => p.shelf === "builds");
 export const getProject = (id: string) => projects.find((p) => p.id === id);
+
+// does this project have a page at /projects/:id ?
+export const hasWriteup = (p: Project) => p.action.type === "writeup" || !!p.readMore;
+
+// where clicking the unit goes, and what to call it
+export function primaryAction(p: Project) {
+    if (p.action.type === "external") {
+        return {
+            href: p.action.href,
+            external: true,
+            label: p.action.label === "GitHub" ? "View on GitHub ↗" : "Open live site ↗",
+        };
+    }
+    return { href: `/projects/${p.id}`, external: false, label: "Read the write-up →" };
+}

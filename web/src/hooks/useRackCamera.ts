@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { stages } from "../data/site";
 import { ROOM } from "../data/room";
+import { cameraState } from "../lib/cameraState";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -71,6 +72,8 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
                 scrub: 1,
                 invalidateOnRefresh: true,
                 snap: { snapTo: "labels", duration: { min: 0.2, max: 0.6 }, delay: 0.1 },
+                onUpdate: (self) => { cameraState.progress = self.progress; },
+
             },
         });
         tl.set(camera, { scale: zoom, y: yFor("overview") }, 0).addLabel("overview", 0);
