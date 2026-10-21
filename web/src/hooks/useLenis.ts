@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { cameraState } from "../lib/cameraState";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,7 @@ export function useLenis() {
 
         const lenis = new Lenis({ lerp: 0.09 });
         lenis.on("scroll", ScrollTrigger.update);
+        cameraState.lenis = lenis;
         const tick = (t: number) => lenis.raf(t * 1000);
         gsap.ticker.add(tick);
         gsap.ticker.lagSmoothing(0);
@@ -18,6 +20,7 @@ export function useLenis() {
         return () => {
             gsap.ticker.remove(tick);
             lenis.destroy();
+            cameraState.lenis = null;
         };
     }, []);
 }

@@ -82,6 +82,19 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         });
 
         ScrollTrigger.refresh();
+        // ---------- jump to a stage (used by the switch ports) ----------
+        cameraState.goTo = (id, duration) => {
+            const st = tl.scrollTrigger;
+            const t = tl.labels[id];
+            if (!st || t === undefined) return;
+            // where that stage's label sits in the page's scroll
+            const y = st.start + (st.end - st.start) * (t / tl.duration());
+            if (cameraState.lenis) {
+                cameraState.lenis.scrollTo(y, { duration, easing: (x) => 1 - Math.pow(1 - x, 3) });
+            } else {
+                window.scrollTo({ top: y });
+            }
+        };
 
         if (reduce) {
             placeRoom();
@@ -135,6 +148,9 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             .to(grade, { opacity: LOOK_FINAL["--grade"], duration: 1 }, 1.2)
             .to(lamp, { opacity: LOOK_FINAL["--lamp"], duration: 1 }, 1.2);
 
-        return () => { document.documentElement.style.overflow = ""; };
+        return () => {
+            document.documentElement.style.overflow = "";
+            cameraState.goTo = () => { };
+        };
     }, { scope, dependencies: [ready], revertOnUpdate: true });
 }

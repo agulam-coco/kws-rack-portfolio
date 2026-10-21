@@ -106,3 +106,49 @@
         display: none;
     }
 }
+
+/* ---------- switch port clicks ---------- */
+/* the port LED blinks fast, like real link activity */
+.port.is-firing .jack .led {
+    animation: port-blink .1s steps(2) 6;
+}
+
+@keyframes port-blink {
+    50% {
+        opacity: .15;
+    }
+}
+
+/* the big packet from a port click: electric blue, so it never reads as normal traffic */
+.packet.is-big .packet-halo {
+    stroke-width: 22;
+    stroke: rgba(80, 190, 255, .55);
+}
+
+.packet.is-big .packet-trail {
+    stroke-width: 4;
+    stroke: rgba(130, 210, 255, .95);
+}
+
+.packet.is-big .packet-head {
+    stroke-width: 6;
+    stroke: #ffffff;
+}
+
+/* the cable carrying it glows */
+.cable.is-firing .cable-glow {
+    opacity: .45;
+}
+
+/* while it flies: the other cables dim and their traffic stops */
+.cables .cable {
+    transition: opacity .25s ease;
+}
+
+.cables.is-quiet .cable:not(.is-firing) {
+    opacity: .45;
+}
+
+.cables.is-quiet .packet:not(.is-big) {
+    opacity: 0 !important;
+}

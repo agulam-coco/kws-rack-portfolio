@@ -204,8 +204,7 @@ export default function Cables() {
         if (!root || !state.cables.length) return;
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-        type Packet = { g: SVGGElement; halo: SVGPathElement; trail: SVGPathElement; head: SVGPathElement; alive: boolean; pos: number; speed: number; dir: 1 | -1; len: number };
-        const lines = state.cables.map((c) => {
+        type Packet = { g: SVGGElement; halo: SVGPathElement; trail: SVGPathElement; head: SVGPathElement; alive: boolean; pos: number; speed: number; dir: 1 | -1; len: number; big: boolean; t0: number; dur: number }; const lines = state.cables.map((c) => {
             const g = root.querySelector<SVGGElement>(`[data-cable="${c.id}"]`)!;
             const body = g.querySelector<SVGPathElement>(".cable-edge")!;
             const packets: Packet[] = [...g.querySelectorAll<SVGGElement>(".packet")].map((p) => ({
@@ -213,12 +212,39 @@ export default function Cables() {
                 halo: p.querySelector<SVGPathElement>(".packet-halo")!,
                 trail: p.querySelector<SVGPathElement>(".packet-trail")!,
                 head: p.querySelector<SVGPathElement>(".packet-head")!,
-                alive: false, pos: 0, speed: 0, dir: 1, len: 0,
+                alive: false, pos: 0, speed: 0, dir: 1, len: 0, big: false, t0: 0, dur: 0,
             }));
             return { id: c.id, g, body, packets, L: body.getTotalLength(), acc: Math.random() };
         });
 
         let lastY = window.scrollY, v = 0, frame = 0, hot = "";
+        let quietUntil = 0, quietTimer = 0; // while a port packet flies, the rest of the traffic hushes
+
+        // one big bright packet, timed to arrive with the camera (switch port clicks)
+        cameraState.firePacket = (id, duration) => {
+            const l = lines.find((x) => x.id === id);
+            if (!l) return;
+            // hush everything else so this one is the only thing moving
+            quietUntil = performance.now() + duration * 1000;
+            root.classList.add("is-quiet");
+            window.clearTimeout(quietTimer);
+            quietTimer = window.setTimeout(() => root.classList.remove("is-quiet"), duration * 1000 + 250);
+            for (const x of lines) for (const q of x.packets) if (!q.big) { q.alive = false; q.g.style.opacity = "0"; }
+
+            const p = l.packets.find((q) => !q.alive) ?? l.packets[0];
+            p.alive = true;
+            p.big = true;
+            p.dir = 1;
+            p.len = 90;
+            p.pos = 0;
+            p.t0 = performance.now();
+            p.dur = duration * 1000;
+            p.g.classList.add("is-big");
+            p.g.style.opacity = "1";
+            // the whole cable glows while it carries the packet
+            l.g.classList.add("is-firing");
+            window.setTimeout(() => l.g.classList.remove("is-firing"), duration * 1000 + 250);
+        };
 
         const dash = (el: SVGPathElement, from: number, to: number, L: number) => {
             el.style.strokeDasharray = `${Math.max(0.1, to - from)} ${L + 200}`;
@@ -256,8 +282,7 @@ export default function Cables() {
                 const on = active.has(l.id);
                 // packets per second on this cable
                 const rate = on ? 0.3 + speedT * 9 : 0.08 + speedT * 1.4;
-                l.acc += rate * dt;
-
+                l.acc = performance.now() < quietUntil ? 0 : l.acc + rate * dt;
                 while (l.acc >= 1) {
                     l.acc -= 1;
                     const p = l.packets.find((q) => !q.alive);
@@ -272,23 +297,36 @@ export default function Cables() {
 
                 for (const p of l.packets) {
                     if (!p.alive) continue;
-                    p.pos += p.speed * p.dir * dt;
-                    const head = p.pos, tail = p.pos - p.len * p.dir;
+                    if (p.big) {
+                        // same ease-out as the camera, so the packet stays in frame the whole trip
+                        const k = Math.min(1, (performance.now() - p.t0) / p.dur);
+                        p.pos = (1 - Math.pow(1 - k, 3)) * (l.L + p.len);
+                        if (k === 1) p.pos = l.L + p.len + 1;
+                    } else {
+                        p.pos += p.speed * p.dir * dt;
+                    } const head = p.pos, tail = p.pos - p.len * p.dir;
                     const a = Math.min(head, tail), b = Math.max(head, tail);
                     dash(p.trail, a, b, l.L);
-                    const h0 = p.dir > 0 ? head - 5 : head, h1 = p.dir > 0 ? head : head + 5;
+                    const hl = p.big ? 12 : 5; // head length
+                    const h0 = p.dir > 0 ? head - hl : head, h1 = p.dir > 0 ? head : head + hl;
                     dash(p.head, h0, h1, l.L);
                     dash(p.halo, h0 - 3, h1 + 3, l.L);
                     if (p.pos > l.L + p.len || p.pos < -p.len) {
                         p.alive = false;
                         p.g.style.opacity = "0";
+                        if (p.big) { p.big = false; p.g.classList.remove("is-big"); }
                     }
                 }
             }
         };
 
         gsap.ticker.add(tick);
-        return () => gsap.ticker.remove(tick);
+        return () => {
+            gsap.ticker.remove(tick);
+            window.clearTimeout(quietTimer);
+            root.classList.remove("is-quiet");
+            cameraState.firePacket = () => { };
+        };
     }, [state.cables]);
 
     const { w, h, cables, rings, straps } = state;
