@@ -481,44 +481,182 @@
 }
 
 .hatch {
+    --lip: 18px;
+    /* how much grille stays showing when it's up */
     position: relative;
     height: 100%;
     margin-right: 30px;
     border-radius: 4px;
     overflow: hidden;
-    background: #15120f;
+    background: #14110e;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, .7);
+    /* the plate is a 3D layer; without this, clicks on the pull tab land on
+       the content underneath it instead */
+    isolation: isolate;
 }
 
+/* ----- what's behind the grille ----- */
 .behind {
-    padding: 16px;
+    height: 100%;
+    padding: calc(var(--lip) + 12px) 18px 14px;
     color: var(--text);
-    font: 11px/1.7 var(--font-mono);
+    font: 11px/1.5 var(--font-mono);
+    opacity: 0;
+    transition: opacity .3s ease;
 }
 
-.behind p {
+.hatch.is-open .behind {
+    opacity: 1;
+    transition: opacity .5s ease .25s;
+}
+
+.behind ul {
     margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
+.behind-head {
+    margin: 0 0 4px;
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.behind-head:not(:first-child) {
+    margin-top: 14px;
+}
+
+.xp li {
+    display: grid;
+    grid-template-columns: 1fr auto 86px;
+    /* fixed date column, so rows line up */
+    column-gap: 14px;
+    padding: 5px 0 6px;
+    border-bottom: 1px dashed rgba(236, 230, 220, .08);
+}
+
+.xp b {
+    font-weight: 500;
+}
+
+.xp span {
+    color: rgba(236, 230, 220, .6);
+}
+
+.xp em {
+    font-style: normal;
+    text-align: right;
+    color: rgba(93, 255, 138, .7);
+}
+
+/* what you did there, under the org */
+.xp small {
+    grid-column: 1 / -1;
+    padding-left: 10px;
+    font-size: 10px;
+    color: rgba(236, 230, 220, .5);
+}
+
+.stack {
+    margin: 0;
+    color: rgba(236, 230, 220, .75);
+    letter-spacing: .02em;
+}
+
+/* links: one row of small buttons */
 .contact-links {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
-    margin-top: 12px;
+    margin-top: 16px !important;
 }
 
 .contact-links a {
-    padding: 4px 10px;
-    border: 1px solid #3a352f;
-    border-radius: 4px;
+    display: block;
+    padding: 5px 11px;
+    border: 1px solid rgba(236, 230, 220, .16);
+    border-radius: 3px;
     text-decoration: none;
+    transition: border-color .2s, color .2s, background .2s;
 }
 
+.contact-links a:hover,
+.contact-links a:focus-visible {
+    border-color: var(--led);
+    color: var(--led);
+    outline: none;
+}
+
+/* the resume is the one most people want, so it stands out */
+.contact-links a.is-resume {
+    border-color: rgba(93, 255, 138, .5);
+    background: rgba(93, 255, 138, .08);
+    color: var(--led);
+}
+
+.contact-links a.is-resume:hover,
+.contact-links a.is-resume:focus-visible {
+    background: rgba(93, 255, 138, .16);
+}
+
+/* ----- the grille: slides up, leaving a lip with the pull tab ----- */
 .grille {
     position: absolute;
     inset: 0;
+    pointer-events: none;
     background:
         radial-gradient(circle, #1a1612 4px, transparent 4.6px) 0 0 / 14px 24px,
         radial-gradient(circle, #1a1612 4px, transparent 4.6px) 7px 12px / 14px 24px,
         linear-gradient(180deg, #efe3d3, var(--beige-dark));
+    box-shadow: 0 6px 14px rgba(0, 0, 0, .55);
+    transition: transform .55s cubic-bezier(.5, 0, .75, 0);
+    /* closing: drops with a bit of weight */
+}
+
+.hatch.is-open .grille {
+    transform: translateY(calc(-100% + var(--lip)));
+    transition: transform .8s cubic-bezier(.2, .8, .2, 1);
+    /* opening: quick lift, soft stop */
+}
+
+.latch {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 64px;
+    height: 16px;
+    margin-left: -32px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px 4px 0 0;
+    background: #1e1a16;
+    color: var(--beige);
+    font: 600 8px/16px var(--font-mono);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, .08) inset;
+    transition: background .2s, color .2s;
+}
+
+.latch:hover,
+.latch:focus-visible {
+    background: #000;
+    color: var(--led);
+    outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .grille,
+    .hatch.is-open .grille,
+    .behind,
+    .hatch.is-open .behind {
+        transition: none;
+    }
 }
 
 .bottom .rj45 {

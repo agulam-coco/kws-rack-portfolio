@@ -4,6 +4,7 @@ export const person = {
     email: "chigabat@grinnell.edu",
     linkedin: "https://linkedin.com/in/jason-chigabatia",
     github: "https://github.com/agulam-coco",
+    resume: "/resume.pdf",
 
 };
 
@@ -78,9 +79,11 @@ export const now: { key: string; values: string[] }[] = [
     { key: "based in", values: ["Grinnell, IA"] },
 ];
 
+// Contact panel. Keep each "did" line under ~55 characters so it fits on one line.
 export const experience = [
-    { org: "Mid City Engineering", role: "SWE Intern", when: "Summer 2026" },
-    { org: "P3+Uplift", role: "SWE Intern", when: "TODO" },
-    { org: "ColorStack", role: "Outreach Marketing Chair", when: "Current" },
-    { org: "Freesound", role: "Manager", when: "Current" },
+    { org: "Mid City Engineering", role: "SWE Intern", when: "Summer 2026", did: "Next.js dashboards on Odoo, ESP32 display firmware" },
+    { org: "P3+Uplift", role: "SWE Intern", when: "Summer 2025", did: "TensorFlow CNN + AWS Lambda alerts for livestock feed" },
 ];
+
+// One line on the contact panel, like a spec label. Five or six max.
+export const stack = ["C", "TypeScript", "Python", "ESP-IDF", "Next.js", "Linux"];
