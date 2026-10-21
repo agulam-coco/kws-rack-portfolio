@@ -11,14 +11,27 @@ import PreviewCard from "./PreviewCard";
 // - mouse: hover shows the card, click opens the project
 // - keyboard: focus shows the card, Enter opens the project
 // - touch: first tap shows the card, the buttons in the card open it
+
+
+// only one card open at a time: opening a card closes whichever was open before
+let closeOpenCard: (() => void) | null = null;
+
 export default function ProjectTarget({ project, className, style, children }: {
   project: Project;
   className: string;
   style?: CSSProperties;
   children: ReactNode;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpenState] = useState(false);
   const pointer = useRef<string>("mouse");
+
+  const setOpen = (next: boolean) => {
+    if (next) {
+      if (closeOpenCard) closeOpenCard();
+      closeOpenCard = () => setOpenState(false);
+    }
+    setOpenState(next);
+  };
 
   const { refs, floatingStyles, context } = useFloating({
     open,
@@ -65,6 +78,13 @@ export default function ProjectTarget({ project, className, style, children }: {
       if (pointer.current === "touch" && !open) {
         e.preventDefault();
         setOpen(true);
+        return;
+      }
+      // mouse click: close the card and drop focus, so it doesn't stay
+      // stuck open when you come back from the new tab
+      if (pointer.current === "mouse") {
+        setOpen(false);
+        (e.currentTarget as HTMLElement).blur();
       }
     },
   } as React.HTMLProps<HTMLElement>);
@@ -76,7 +96,7 @@ export default function ProjectTarget({ project, className, style, children }: {
           {children}
         </a>
       ) : (
-        <Link {...(props as object)} to={action.href}>
+        <Link {...(props as object)} to={action.href} target="_blank" rel="noopener noreferrer">
           {children}
         </Link>
       )}

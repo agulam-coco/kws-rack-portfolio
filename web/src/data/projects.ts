@@ -1,3 +1,5 @@
+import { generatedPreviews } from "./previews.generated.ts";
+
 export type Project = {
     id: string;                 // URL slug + cable id
     name: string;
@@ -9,21 +11,24 @@ export type Project = {
     preview?: string;           // image path for the hover card
     action: { type: "external"; href: string; label: "GitHub" | "Live" } | { type: "writeup" };
     readMore?: boolean;
+    repo?: string;
 };
 
 export const projects: Project[] = [
     {
         id: "watch-my-tokens", name: "Watch My Tokens", shelf: "nodes", color: "#e3342f",
-        event: "ShellHacks 2026 · with Robert Cifuentes",
+        event: "ShellHacks 2026",
         summary: "A tiny screen on your monitor showing what your AI agents are doing, with a real button to approve risky actions.",
         tags: ["ESP32-C3", "Hardware", "Claude Code"],
+        repo: "agulam-coco/watch-my-tokens",
         action: { type: "external", href: "https://github.com/agulam-coco/watch-my-tokens", label: "GitHub" },
     },
     {
         id: "fissure", name: "Fissure", shelf: "nodes", color: "#f59e0b",
-        event: "Hack Dearborn 2026 · solo",
+        event: "Hack Dearborn 2026",
         summary: "Clusters NHTSA complaints by meaning to catch vehicle defects before the recall does.",
         tags: ["Python", "IBM watsonx", "Data"],
+        repo: "agulam-coco/fissure",
         action: { type: "external", href: "https://fissure-xi.vercel.app", label: "Live" },
         readMore: true,
     },
@@ -32,7 +37,7 @@ export const projects: Project[] = [
         event: "Grinnell College",
         summary: "The website for Freesound, the student music community I run.",
         tags: ["React", "Vite", "Express"],
-        action: { type: "writeup" },
+        action: { type: "external", href: "https://freesound.us.reclaim.cloud/", label: "Live" },
     },
     {
         id: "guitars", name: "Guitars", shelf: "builds", color: "#a855f7",
@@ -62,4 +67,15 @@ export function primaryAction(p: Project) {
         };
     }
     return { href: `/projects/${p.id}`, external: false, label: "Read the write-up →" };
+}
+
+// images for the hover card, best first. The card tries each in order.
+export function previewImages(p: Project) {
+    const saved = generatedPreviews[p.id] ?? {};
+    const list: string[] = [];
+    if (p.preview) list.push(p.preview);       // one you picked yourself
+    if (saved.live) list.push(saved.live);     // screenshot of the live site
+    if (saved.social) list.push(saved.social); // your custom GitHub social preview
+    if (p.repo) list.push(`https://opengraph.githubassets.com/1/${p.repo}`); // GitHub's auto card
+    return list;
 }
