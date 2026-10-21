@@ -1,0 +1,41 @@
+Okay so this one started with a conversation.
+
+At Hack Dearborn this October (Conjure Reality, 24 hours at UM-Dearborn), I ended up chatting with a recruiter from Ford who was talking about their challenge. I walked away thinking, what if I just build something Ford would actually care about? Best case, he likes it and I get an internship out of it 😂
+
+I was solo, so I picked something I could actually finish in a day: car recalls.
+
+## The idea
+
+When a car gets recalled, the problem has usually been around for a while. A lot of the time drivers have already been complaining about it, and NHTSA keeps all of those complaints in a public database. So the warning signs are kind of just sitting there.
+
+My question was: if you read the complaints, could you spot a defect before the company recalls it? And if you could, you'd set it up to watch the complaints and ping a safety person at the company once something starts piling up, so they can go check that car line.
+
+## Why it's harder than it sounds
+
+Nobody describes a problem the same way. One person says the steering "locked up." Someone else says the wheel "got really hard to turn on the highway." Same thing, totally different words.
+
+NHTSA does sort complaints into categories, but problems don't stay in their boxes. Somebody writes "my engine light came on and the wheel was a bit tough" and it might get filed under engine, even though it's really a steering problem. For the Ford Fusion recall I tested on, the same defect was spread across 78 categories. Count by category and you never really see it.
+
+So I ignored the categories and just looked at what people actually wrote.
+
+## What I built
+
+Fissure takes all the complaints for one car, turns the text into numbers based on the words people use, and groups complaints that sound alike. Each group ends up being one kind of problem people keep describing. When a group grows to 25 complaints in a year, it gets flagged.
+
+Fun bug I ran into: normal text cleanup throws out words like "not," so "airbag did not deploy" turns into "airbag deploy." Which is the exact opposite. I keep those words now.
+
+I also built a little site for the demo. There's an animation that shows complaints coming in all kinds of different ways, since that's really the whole point. You can type what's wrong with your car in your own words, and IBM Granite matches it to one of the problems Fissure found.
+
+## Did it work?
+
+To test it, I replayed the complaints month by month like it was happening live, no peeking ahead.
+
+Ford recalled the Fusion in September 2015 because the power steering could fail. Fissure flagged it in July 2012. That's about **3 years earlier**, just from complaints.
+
+To be fair, it doesn't work every time. I tried six real recalls and only two held up (the other was a Chevy Silverado, about 16 months early). Some recalls just didn't have enough complaints to catch. One looked crazy good on paper, 97 months early, but when I dug in it wasn't much better than random, so I didn't count it.
+
+## If I keep going
+
+I'd run it on new NHTSA data every month and actually send the alerts, give more weight to complaints that mention crashes or injuries, and cover more cars than just the steering stuff.
+
+Still waiting on that Ford internship though.

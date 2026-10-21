@@ -38,13 +38,16 @@ export const projects: Project[] = [
         links: { live: "https://freesound.us.reclaim.cloud/" },
     },
     {
-        id: "guitars", name: "Guitars", shelf: "builds", color: "#a855f7",
-        summary: "TODO", tags: ["Music"],
+        id: "guitars", name: "Music", shelf: "builds", color: "#a855f7",
+        summary: "Bass and guitar. Mostly improv, mostly loud.",
+        tags: ["Bass", "Guitar", "Improv"],
+        preview: "/media/previews/guitars-card.jpg",
     },
     {
         id: "server-rack", name: "Server Rack", shelf: "builds", color: "#14b8a6",
         summary: "My homelab and the rack this site is based on.",
         tags: ["Raspberry Pi", "Linux"],
+        preview: "/media/previews/server-rack-card.jpg",
     },
 ];
 

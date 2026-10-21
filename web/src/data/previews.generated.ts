@@ -6,5 +6,8 @@ export const generatedPreviews: Record<string, { live?: string; social?: string 
   "fissure": {
     "social": "/media/previews/fissure-social.png",
     "live": "/media/previews/fissure.jpg"
+  },
+  "freesound": {
+    "live": "/media/previews/freesound.jpg"
   }
 };

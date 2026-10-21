@@ -1,0 +1,88 @@
+This one was built in Miami.
+
+In September I went to ShellHacks, which is Florida's biggest hackathon. It was at FIU's Graham Center, 1,400+ hackers, and honestly the campus was beautiful. I built this with Robert Cifuentes.
+
+![FIU's campus: palm-lined walkways, the green, and a sculpture garden](/media/projects/watch-my-tokens/campus.jpg)
+
+## The vibe
+
+ShellHacks kind of changed how I see hackathons. I saw some really cool projects. One team built [BenchLog](https://devpost.com/software/benchlog), which is basically version control for hardware. They pointed a camera at a breadboard, and it could tell when you added, moved, or pulled a wire, then saved each version of the circuit to git right next to the code. That was insane 🤯
+
+There were recruiters everywhere and I got to talk to a lot of cool people. Companies like Assurant and Sperry Tech were giving out internship and interview spots right there at the event. That was insane. The stakes were really high and everybody was super competitive.
+
+## The idea
+
+Robert and I both use Claude Code a lot. The annoying part is you have to keep watching the terminal. You want to catch it before it runs something scary like `rm -rf` or a force push to main, and you also kind of want to know how much money you're burning.
+
+So we thought, what if that was a little physical thing on your desk instead?
+
+Watch My Tokens is a tiny round touchscreen that clips onto your monitor. Normally it just shows how many agents are running, how full the context is, and how much you've spent today.
+
+![The device sitting on top of my laptop while I worked on the firmware](/media/projects/watch-my-tokens/monitor.jpg)
+
+When Claude is about to run a shell command, the ring turns red, it reads the command out loud, and shows it on the screen. Tap to approve. Hold for a second to deny.
+
+![The device asking to approve a command](/media/projects/watch-my-tokens/approve.jpg)
+
+If you don't answer in about 25 seconds, it just falls back to the normal prompt in the terminal. It never approves anything on its own, which felt important.
+
+## How it works
+
+There are three pieces:
+
+1. A small hook in Claude Code catches every shell command before it runs and sends it to a bridge on my laptop.
+2. The bridge is a Node.js server. It talks to the device over USB, reads Claude's log files to figure out tokens and cost, and uses ElevenLabs to read the command out loud.
+3. The device itself is an ESP32-C3 with a 1.28 inch round screen. I wrote the firmware in C with ESP-IDF and drew the screens with LVGL.
+
+Robert started the project, and I took on most of the hardware side: the firmware, the screens, touch, the bridge, cost tracking, and the voice alerts.
+
+## The hard part was the screen
+
+Getting the screen to work was most of the hackathon honestly.
+
+We started in PlatformIO but kept running into connection problems, so I switched to plain ESP-IDF in the middle of the hackathon. Not fun.
+
+![Building firmware at 1:55 AM](/media/projects/watch-my-tokens/build.jpg)
+
+The board didn't come with a clear pinout either, so I had to figure out which pins went where by trial and error. Then the colors were all wrong. I'd ask for one color and get a totally different one. It turned out the screen wanted its colors in a different order (BGR instead of RGB), and flipping one setting fixed it 😅
+
+![Testing colors on the screen](/media/projects/watch-my-tokens/colors.jpg)
+
+After that, everything was showing up mirrored. You can see the "waiting..." text is backwards here. I fixed that in code.
+
+![Mirrored text on the screen](/media/projects/watch-my-tokens/mirrored.jpg)
+
+The big thing I learned: with hardware, the symptom almost never tells you the actual problem. Wrong colors and a backwards screen look like broken hardware, but they were really just settings.
+
+## The end result
+
+By the end it was all working. At one point I had 18 agents running at once, with the ShellHacks banner right behind it.
+
+![18 agents running, ShellHacks banner in the back](/media/projects/watch-my-tokens/live.jpg)
+
+Claude asks, the ring goes red, the device reads it out, and you tap or hold. It also keeps a little tally of what you approved and denied, plus what you've spent today.
+
+![The tally screen: 7 approved, 2 denied, $1.12 today](/media/projects/watch-my-tokens/stats.jpg)
+
+## What I'd add next
+
+- A 3D printed case so it actually looks finished
+- Checking file edits too, not just shell commands
+- Handling more than one approval at a time
+- Swiping to scroll long commands
+
+## More photos 📸
+
+<div className="wu-gallery">
+  <img src="/media/projects/watch-my-tokens/gallery/01.jpg" alt="The device at the hackathon with the terminal behind it" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/02.jpg" alt="Palm trees and a bench on FIU's campus" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/03.jpg" alt="The pending approval screen" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/04.jpg" alt="The ring glowing purple" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/05.jpg" alt="Sculptures on the green at FIU" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/06.jpg" alt="Holding the device mid approval" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/07.jpg" alt="The idle ring on a table" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/08.jpg" alt="A walkway lined with palms" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/09.jpg" alt="Approve prompt with the red ring" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/10.jpg" alt="Close up of the home screen" loading="lazy" />
+  <img src="/media/projects/watch-my-tokens/gallery/11.jpg" alt="The ring glowing green" loading="lazy" />
+</div>

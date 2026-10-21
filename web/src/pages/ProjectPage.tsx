@@ -31,28 +31,23 @@ export default function ProjectPage() {
 
     return (
         <main className="writeup" style={{ "--accent": project.color } as CSSProperties}>
-            <Link className="wu-back" to="/">← back to the rack</Link>
+            <div className="wu-sheet">
+                <Link className="wu-back" to="/">← back</Link>
 
-            <header className="wu-head">
-                {project.event && <p className="wu-event">{project.event}</p>}
-                <h1>{project.name}</h1>
-                <p className="wu-summary">{project.summary}</p>
-
-                <ul className="wu-tags">
-                    {project.tags.map((t) => <li key={t}>{t}</li>)}
-                </ul>
-
-                {(github || live) && (
-                    <p className="wu-links">
-                        {live && <a href={live} target="_blank" rel="noopener noreferrer">Live site ↗</a>}
-                        {github && <a href={github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}
+                <header className="wu-head">
+                    <h1>{project.name}</h1>
+                    <p className="wu-summary">{project.summary}</p>
+                    <p className="wu-meta">
+                        {[project.event, project.tags.join(", ")].filter(Boolean).join(" · ")}
+                        {live && <a href={live} target="_blank" rel="noopener noreferrer">live site ↗</a>}
+                        {github && <a href={github} target="_blank" rel="noopener noreferrer">github ↗</a>}
                     </p>
-                )}
-            </header>
+                </header>
 
-            <article className="wu-body">
-                {load ? (Content ? <Content /> : null) : <p className="wu-soon">Write-up coming soon.</p>}
-            </article>
+                <article className="wu-body">
+                    {load ? (Content ? <Content /> : null) : <p className="wu-soon">Write-up coming soon.</p>}
+                </article>
+            </div>
         </main>
     );
 }

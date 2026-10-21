@@ -1,0 +1,115 @@
+This is the rack this whole site is based on. It sits on my desk in my dorm room.
+
+![The finished rack on my desk](/media/projects/server-rack/hero.jpg)
+
+## Why I built it
+
+I started this in August because I wanted to stop paying for iCloud. My photos were my main thing, and I figured, why rent storage when I could just own it?
+
+A friend lent me a few Raspberry Pis and some HATs, so I had somewhere to start. I ordered some hard drives off eBay and started learning as I went: Tailscale, SMB file shares, and a lot of Linux stuff I'd never touched before.
+
+## Before the rack
+
+Before this, my "backup system" was two hard drives sitting on my desk. Every now and then I'd plug them into my laptop and copy stuff over. If I forgot, nothing got backed up.
+
+<div className="wu-grid wu-grid-2">
+  <figure>
+    <img src="/media/projects/server-rack/before.jpg" alt="Loose hard drives, a Pi and a switch spread across my desk" />
+    <figcaption>The old setup, all over my desk</figcaption>
+  </figure>
+  <figure>
+    <img src="/media/projects/server-rack/dock.jpg" alt="Two hard drives in a dock" />
+    <figcaption>The drive dock I used to plug in by hand</figcaption>
+  </figure>
+</div>
+
+## Printing the rack
+
+Then I found the [KWS Rack v2](https://makerworld.com/en/models/2139130), a 10 inch homelab rack you can 3D print, designed by Ilan Kushnir. I didn't design any of the rack myself, so all the credit for the design goes to him. I just printed it and put it together.
+
+I printed all the parts at the [Stew Makerspace](https://www.stew.sites.grinnell.edu) in Grinnell. The rails came out in black and the frame in white.
+
+I'd never really 3D printed anything before this, so huge thanks to Colby at the Stew. He helped me with pretty much everything on the printer side, from infill settings to getting prints to actually come out right, and helped me put the whole thing together. I wouldn't have gotten this far without him 🙏
+
+![The Bambu Lab printer at the Stew](/media/projects/server-rack/printer.jpg)
+
+*Most of the rack came off this printer.*
+
+![A batch of printed rails](/media/projects/server-rack/rails.jpg)
+
+The rails need brass heat set inserts so the screws have something to bite into. I ordered the inserts and nuts off AliExpress and spent a good chunk of time at the Stew melting them in one by one with a soldering iron. It's weirdly satisfying 🔥
+
+<div className="wu-grid wu-grid-2">
+  <figure>
+    <img src="/media/projects/server-rack/inserts.jpg" alt="Bags of M5 brass heat set inserts" />
+    <figcaption>A lot of inserts</figcaption>
+  </figure>
+  <figure>
+    <img src="/media/projects/server-rack/inserts-in.jpg" alt="Brass inserts set into a printed rail" />
+    <figcaption>Melted in</figcaption>
+  </figure>
+</div>
+
+## Putting it together
+
+It came together over a few weeks. First the frame, then the rails, then the sleds that hold the Pis.
+
+<div className="wu-grid wu-grid-2">
+  <figure>
+    <img src="/media/projects/server-rack/frame-lab.jpg" alt="First rail attached to the frame at the makerspace" />
+    <figcaption>First rail on, at the Stew</figcaption>
+  </figure>
+  <figure>
+    <img src="/media/projects/server-rack/frame-dorm.jpg" alt="The white frame on my dorm desk" />
+    <figcaption>The frame back in my room</figcaption>
+  </figure>
+</div>
+
+![A printed sled for holding the Pis](/media/projects/server-rack/sled.jpg)
+
+## What's running on it
+
+Right now there's a network switch up top and a row of Pi sleds under it. Two of the Pis do the real work:
+
+- **The tunnel.** This is how I get to everything from anywhere, using Tailscale.
+- **The NAS.** It holds the drives and handles file sharing over SMB, so I can open my files from my laptop like they're local.
+
+My photos back up with [Immich](https://immich.app). Now everything just backs up on its own to the rack in my room. No more plugging drives in.
+
+The switch sits on its own printed shelf, with a honeycomb top so it can breathe.
+
+<div className="wu-grid wu-grid-2 wu-grid-wide">
+  <figure>
+    <img src="/media/projects/server-rack/shelf-front.jpg" alt="Printed rack shelf holding a 5 port switch, front view" />
+  </figure>
+  <figure>
+    <img src="/media/projects/server-rack/shelf-side.jpg" alt="Printed rack shelf with a honeycomb top, side view" />
+  </figure>
+</div>
+
+![The switch and Pi sleds up close](/media/projects/server-rack/switch.jpg)
+
+## What's next
+
+I'm still making it more reliable. The goal is to follow the 3-2-1 rule: 3 copies of my stuff, on 2 different kinds of storage, with 1 somewhere other than my room. Once that's done I can finally cancel iCloud. Soon.
+
+![The rack on my desk at night](/media/projects/server-rack/desk.jpg)
+
+## More photos 📸
+
+<div className="wu-gallery">
+  <img src="/media/projects/server-rack/gallery/01.jpg" alt="The rack glowing in the dark" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/02.jpg" alt="The rack with the SATA HAT in front" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/03.jpg" alt="Heat set inserts sitting on a rail before melting in" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/04.jpg" alt="The rack under my loft bed" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/05.jpg" alt="Printed rails at the makerspace" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/06.jpg" alt="Close up of the SATA HAT wiring" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/07.jpg" alt="Holding a printed cage" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/08.jpg" alt="A rail with the first inserts in" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/09.jpg" alt="My desk with the rack and amp" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/10.jpg" alt="SATA cables running to the drives" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/11.jpg" alt="Inserts set into a rail" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/12.jpg" alt="The old setup with loose drives" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/13.jpg" alt="My desk before the rack moved in" loading="lazy" />
+  <img src="/media/projects/server-rack/gallery/14.jpg" alt="The switch shelf" loading="lazy" />
+</div>
