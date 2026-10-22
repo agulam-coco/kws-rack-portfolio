@@ -13,7 +13,7 @@ export const person = {
 export const about = {
     paragraphs: [
         "I build software, and lately a lot of it runs on hardware I can hold: tiny screens, a Pi in my dorm, and this rack.",
-        "At Grinnell I study CS and Linguistics, run Freesound, and do outreach for ColorStack.",
+        "At Grinnell I study CS and Linguistics, run Freesound, and am involved on campus",
     ],
 };
 
