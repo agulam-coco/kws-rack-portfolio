@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
+import { IS_PHONE as PHONE } from "../lib/intro";
 import gsap from "gsap";
 import { ports, stages } from "../data/site";
 import { cameraState } from "../lib/cameraState";
@@ -281,7 +282,8 @@ export default function Cables() {
             for (const l of lines) {
                 const on = active.has(l.id);
                 // packets per second on this cable
-                const rate = on ? 0.3 + speedT * 9 : 0.08 + speedT * 1.4;
+                // phones: no background traffic (the port-click packet still runs)
+                const rate = PHONE ? 0 : on ? 0.3 + speedT * 9 : 0.08 + speedT * 1.4;
                 l.acc = performance.now() < quietUntil ? 0 : l.acc + rate * dt;
                 while (l.acc >= 1) {
                     l.acc -= 1;

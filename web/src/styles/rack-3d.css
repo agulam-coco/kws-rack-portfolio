@@ -1,7 +1,12 @@
 /* ---------- scene ---------- */
 .viewport {
-    position: relative;
+    /* fixed: the page scrolls past it and the camera follows (useRackCamera) */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 100vh;
+    height: 100lvh; /* phones: don't jump when the address bar hides */
     overflow: hidden;
     display: flex;
     justify-content: center;

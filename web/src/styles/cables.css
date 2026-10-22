@@ -4,6 +4,9 @@
     left: 0;
     overflow: visible;
     pointer-events: none;
+    /* own GPU layer: packets redraw the cables every frame, and without this
+       the browser repaints the whole rack with them */
+    will-change: transform;
 }
 
 .cables path {

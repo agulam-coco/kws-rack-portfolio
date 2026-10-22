@@ -25,7 +25,6 @@ const SNAP_DURATION = 0.6;    // s the settle takes
 export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boolean) {
     useGSAP(() => {
         const root = scope.current!;
-        const viewport = root.querySelector<HTMLElement>(".viewport")!;
         const camera = root.querySelector<HTMLElement>(".camera")!;
         const tilt = root.querySelector<HTMLElement>(".tilt")!;
         const rack = root.querySelector<HTMLElement>(".rack")!;
@@ -70,15 +69,22 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         gsap.set(blur, { autoAlpha: reduce ? 1 : 0 });
 
         // ---------- scroll: pan from unit to unit ----------
+        // The viewport is position: fixed (rack-3d.css) and the scene is just a
+        // tall empty box to scroll through. Much smoother on phones than
+        // ScrollTrigger pinning, which jumps the page around while you scroll.
+        const scrollLen = () => window.innerHeight * SCROLL_PER_STAGE * (stages.length - 1);
+        const sizeScene = () => { root.style.height = `${window.innerHeight + scrollLen()}px`; };
+        sizeScene();
+        ScrollTrigger.addEventListener("refreshInit", sizeScene);
+
         const tl = gsap.timeline({
             // linear: the camera moves exactly as much as you scroll, so it never
             // feels heavy. The easing happens in the snap instead (below).
             defaults: { ease: "none", duration: 1 },
             scrollTrigger: {
-                trigger: viewport,
+                trigger: root,
                 start: "top top",
-                end: () => `+=${window.innerHeight * SCROLL_PER_STAGE * (stages.length - 1)}`,
-                pin: true,
+                end: () => `+=${scrollLen()}`,
                 scrub: true, // follow the scroll exactly (Lenis already smooths the wheel)
                 invalidateOnRefresh: true,
                 onUpdate: (self) => {
@@ -87,11 +93,14 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
                 },
             },
         });
-        tl.set(camera, { scale: zoom, y: yFor("overview") }, 0).addLabel("overview", 0);
+        tl.set(camera, { scale: zoom, y: yFor("overview"), immediateRender: true }, 0).addLabel("overview", 0);
         stages.slice(1).forEach((s) => {
             tl.to(camera, { scale: zoom, y: yFor(s.id) }).addLabel(s.id);
         });
 
+        // put the camera on the first stage now; without pinning, the timeline
+        // doesn't draw its first frame until you scroll
+        gsap.set(camera, { scale: zoom(), y: yFor("overview")() });
         ScrollTrigger.refresh();
         // ---------- jump to a stage (used by the switch ports) ----------
         // where a stage's label sits in the page's scroll
@@ -189,10 +198,31 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             gsap.set(grade, { opacity: LOOK_FINAL["--grade"] });
             gsap.set(lamp, { opacity: LOOK_FINAL["--lamp"] });
             document.documentElement.style.overflow = "";
+        } else if (IS_PHONE) {
+            // phones: the push-in scales the whole room and rack every frame,
+            // which phones can't keep smooth. A short fade looks cleaner.
+            gsap.set(fg, { autoAlpha: 0 });
+            gsap.set(desk, { autoAlpha: 0 });
+            gsap.set(blur, { autoAlpha: 1 });
+            gsap.set(fairy, { autoAlpha: 0.35 });
+            gsap.set(grade, { opacity: LOOK_FINAL["--grade"] });
+            gsap.set(lamp, { opacity: LOOK_FINAL["--lamp"] });
+            gsap.set(rack, { autoAlpha: 1 });
+            gsap.fromTo(tilt,
+                { scale: 1.04, y: 14, autoAlpha: 0 },
+                {
+                    scale: 1, y: 0, autoAlpha: 1, duration: 0.9, delay: 0.3, ease: "power2.out",
+                    onComplete: () => { gsap.set(tilt, { clearProps: "willChange" }); markIntroSeen(); },
+                });
+            document.documentElement.style.overflow = "";
         } else gsap.timeline({
             delay: 0.35, // let the loader fade out first
+            // the swap fades several big layers at once; giving them their own
+            // GPU layer for the intro keeps the browser from repainting them
+            onStart: () => { gsap.set([rack, desk, fg, ...blur], { willChange: "opacity" }); },
             onComplete: () => {
                 document.documentElement.style.overflow = "";
+                gsap.set([rack, desk, fg, ...blur], { willChange: "auto" });
                 markIntroSeen();
             },
         })
@@ -210,7 +240,7 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             .to(grade, { opacity: LOOK_FINAL["--grade"], duration: 1 }, 1.2)
             .to(lamp, { opacity: LOOK_FINAL["--lamp"], duration: 1 }, 1.2)
             // a bit quicker on phones, where every frame costs more
-            .timeScale(IS_PHONE ? 1.3 : 1);
+            ;
 
         return () => {
             document.documentElement.style.overflow = "";
@@ -219,6 +249,8 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             window.removeEventListener("scroll", onScroll);
             window.removeEventListener("touchstart", onTouchStart);
             window.removeEventListener("touchend", onTouchEnd);
+            ScrollTrigger.removeEventListener("refreshInit", sizeScene);
+            root.style.height = "";
         };
     }, { scope, dependencies: [ready], revertOnUpdate: true });
 }
