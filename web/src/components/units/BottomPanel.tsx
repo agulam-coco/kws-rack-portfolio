@@ -48,7 +48,7 @@ export default function BottomPanel() {
                     </ul>
 
                     <p className="behind-head">stack</p>
-                    <p className="stack">{stack.join(" · ")}</p>
+                    <p className="stack">{stack.join(", ")}</p>
 
                     <ul className="contact-links">
                         {links.map((l) => (

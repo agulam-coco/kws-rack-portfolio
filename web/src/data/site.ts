@@ -17,40 +17,48 @@ export const about = {
     ],
 };
 
+// hint: shown above the tab bar on touch screens (no hover there), so people
+// know what they can tap. Leave it "" for shelves with nothing to tap.
 export const stages = [
     {
         id: "overview",
         label: "/01 overview",
+        hint: "scroll to look around",
         title: person.name,
         body: "CS and Linguistics at Grinnell, class of 2028. I write software, and lately a lot of it runs on hardware I can actually hold.",
     },
     {
         id: "network",
         label: "/02 network",
+        hint: "tap a port to follow its cable",
         title: "This switch is the menu",
         body: "Each port has a cable running to a different part of the rack. Click one and the page follows the cable there.",
     },
     {
         id: "now",
         label: "/03 now",
+        hint: "",
         title: "Right now",
         body: "What I'm working on this semester. I update it when things change.",
     },
     {
         id: "projects",
         label: "/04 projects",
+        hint: "tap a drive to open it",
         title: "Projects",
         body: "Each machine is something I built. Hover over one to see what it is, and click to open it.",
     },
     {
         id: "builds",
         label: "/05 builds",
+        hint: "tap the amp or the pi",
         title: "Off the screen",
         body: "Things I've made or put together that aren't just code.",
     },
     {
         id: "contact",
         label: "/06 contact",
+        hint: "",
         title: "Contact",
         body: "Where I've worked, what I help run on campus, and how to reach me.",
     },

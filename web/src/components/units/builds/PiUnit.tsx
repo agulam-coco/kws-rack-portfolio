@@ -9,7 +9,7 @@ export default function PiUnit({ project }: { project: Project }) {
                 <span className="pi-vents" />
                 <span className="oled">
                     <b>otter</b>
-                    <span>up 12d · 41°C</span>
+                    <span>up 12d, 41°C</span>
                 </span>
                 <span className="pi-leds">
                     <i className="led" />

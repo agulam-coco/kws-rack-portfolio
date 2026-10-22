@@ -27,7 +27,7 @@ export default function ProjectPage() {
         const desc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
         const canon = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
         const before = { title: document.title, desc: desc?.content, canon: canon?.href };
-        document.title = `${project.name} · ${person.name}`;
+        document.title = `${project.name} | ${person.name}`;
         if (desc) desc.content = project.summary;
         if (canon) canon.href = `https://jasonchigabatia.com/projects/${project.id}`;
         return () => {
@@ -49,7 +49,7 @@ export default function ProjectPage() {
                     <h1>{project.name}</h1>
                     <p className="wu-summary">{project.summary}</p>
                     <p className="wu-meta">
-                        {[project.event, project.tags.join(", ")].filter(Boolean).join(" · ")}
+                        {[project.event, project.tags.join(", ")].filter(Boolean).join(" / ")}
                         {live && <a href={live} target="_blank" rel="noopener noreferrer">live site ↗</a>}
                         {github && <a href={github} target="_blank" rel="noopener noreferrer">github ↗</a>}
                     </p>

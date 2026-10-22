@@ -304,6 +304,98 @@
     }
 }
 
+/* ---------- touch screens: show what's tappable ---------- */
+/* no hover on phones and tablets, so a hint line sits above the tab bar,
+   the tappable things lift once when you land on a shelf (Hud.tsx), and
+   they press down under your finger */
+.hud-hint {
+    position: fixed;
+    left: 50%;
+    bottom: calc(80px + env(safe-area-inset-bottom));
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(18, 17, 16, .82);
+    font: 11px/1.3 var(--font-mono);
+    letter-spacing: .04em;
+    white-space: nowrap;
+    color: rgba(236, 230, 220, .75);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-50%);
+    transition: opacity .3s ease;
+}
+
+.hud.is-on .hud-hint.is-on {
+    opacity: 1;
+}
+
+/* little green LED in front, same as the rest of the rack */
+.hud-hint::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 8px;
+    border-radius: 50%;
+    vertical-align: 1px;
+    background: var(--led);
+    box-shadow: 0 0 6px var(--led);
+}
+
+/* tablets in landscape keep the desktop rail, so the hint just sits low */
+@media (min-width: 1001px) {
+    .hud-hint {
+        bottom: 28px;
+    }
+}
+
+@media (hover: none) {
+    /* uses `translate`, not `transform`, because phone.css flattens transforms */
+    .rack [data-nudge] {
+        outline: 3px solid transparent;
+        outline-offset: 5px;
+        animation: tap-nudge 1.1s ease-in-out both;
+    }
+
+    .rack .project-target,
+    .rack .port {
+        transition: translate .1s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .rack .project-target:active,
+    .rack .port:active {
+        translate: 0 5px;
+    }
+}
+
+@keyframes tap-nudge {
+    0%,
+    100% {
+        translate: 0 0;
+        outline-color: rgba(93, 255, 138, 0);
+    }
+
+    20% {
+        translate: 0 -14px;
+        outline-color: rgba(93, 255, 138, .85);
+    }
+
+    40% {
+        translate: 0 0;
+    }
+
+    55% {
+        translate: 0 -7px;
+    }
+
+    70% {
+        translate: 0 0;
+        outline-color: rgba(93, 255, 138, .5);
+    }
+}
+
 /* short screens: drop the about so it can't hit the rail */
 @media (max-height: 640px) {
     .hud-about {
@@ -316,6 +408,10 @@
     .hud,
     .hud.is-on {
         transition: none;
+    }
+
+    .rack [data-nudge] {
+        animation: none;
     }
 
 }

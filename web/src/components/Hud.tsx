@@ -6,6 +6,12 @@ import { cameraState, jumpTo, onStageChange } from "../lib/cameraState";
 const ROW = 30; // px per stage on the rail (keep in sync with --row in hud.css)
 const CONTACT = stages.findIndex((s) => s.id === "contact");
 
+// touch screens (phones, tablets) can't hover, so they get a hint line and a
+// one-time nudge on the things you can tap
+const TOUCH = window.matchMedia("(hover: none)").matches;
+const NUDGE_WAIT = 700; // ms of no scrolling before the nudge plays
+const nudged = new Set<number>(); // shelves that already nudged this visit
+
 // Desktop: plain text in the corners. Your name and a short about up top,
 // and a rail bottom left like the U-numbers on a rack. The green marker rides
 // the rail as you scroll, and clicking a row jumps there.
@@ -16,6 +22,41 @@ export default function Hud({ show }: { show: boolean }) {
     const marker = useRef<HTMLSpanElement>(null);
 
     useEffect(() => onStageChange(setI), []);
+
+    // first time you settle on a shelf, the tappable things on it lift once
+    useEffect(() => {
+        if (!TOUCH || !show || nudged.has(i)) return;
+        const targets = document.querySelectorAll<HTMLElement>(
+            `.rack [data-stage="${stages[i].id}"] :is(.project-target, .port)`);
+        if (!targets.length) return;
+
+        let timer = 0;
+        const fire = () => {
+            nudged.add(i);
+            window.removeEventListener("scroll", wait);
+            targets.forEach((el, n) => {
+                el.style.animationDelay = `${n * 90}ms`;
+                el.dataset.nudge = "";
+                const done = (e: AnimationEvent) => {
+                    if (e.target !== el) return; // ignore the LED blinks inside
+                    delete el.dataset.nudge;
+                    el.style.animationDelay = "";
+                    el.removeEventListener("animationend", done);
+                };
+                el.addEventListener("animationend", done);
+            });
+        };
+        // wait until the page stops moving so it plays after the snap
+        const wait = () => { window.clearTimeout(timer); timer = window.setTimeout(fire, NUDGE_WAIT); };
+        window.addEventListener("scroll", wait, { passive: true });
+        wait();
+        return () => { window.clearTimeout(timer); window.removeEventListener("scroll", wait); };
+    }, [i, show]);
+
+    // keep the last hint's text while it fades out
+    const lastHint = useRef("");
+    const hint = stages[i].hint;
+    if (hint) lastHint.current = hint;
 
     // move the marker every frame from the real scroll progress, so it slides
     // continuously instead of jumping row to row (hidden on phones)
@@ -53,11 +94,11 @@ export default function Hud({ show }: { show: boolean }) {
                 <ul>
                     {experience.map((e) => (
                         <li key={e.org}>
-                            <b>{e.org}</b> <span>{e.role} · {e.when}</span>
+                            <b>{e.org}</b> <span>{e.role}, {e.when}</span>
                         </li>
                     ))}
                 </ul>
-                <p className="hud-stack">{stack.join(" · ")}</p>
+                <p className="hud-stack">{stack.join(", ")}</p>
                 <p className="hud-links">
                     <a href={`mailto:${person.email}`}>email</a>
                     <a href={person.linkedin} target="_blank" rel="noopener noreferrer">linkedin</a>
@@ -65,6 +106,10 @@ export default function Hud({ show }: { show: boolean }) {
                     {person.resume && <a className="is-resume" href={person.resume} target="_blank" rel="noopener noreferrer">resume ↗</a>}
                 </p>
             </section>
+
+            {TOUCH && (
+                <p className={`hud-hint${hint ? " is-on" : ""}`} aria-hidden>{lastHint.current}</p>
+            )}
 
             <nav className="hud-rail" aria-label="Sections">
                 <span className="hud-marker" ref={marker} aria-hidden />
