@@ -169,13 +169,24 @@
         pointer-events: none;
     }
 
+    /* phones: your name as a real heading, same serif as the front panel */
+    .hud-who b {
+        margin-bottom: 2px;
+        font-family: var(--font-display);
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 1.15;
+        letter-spacing: -.01em;
+        text-transform: none;
+    }
+
     /* dark fade behind the name only (fixed height, so nothing has to
        re-layout when the about text hides) */
     .hud-intro::before {
         content: "";
         position: absolute;
         inset: 0 0 auto;
-        height: calc(84px + env(safe-area-inset-top));
+        height: calc(120px + env(safe-area-inset-top));
         background: linear-gradient(#121110 55%, transparent);
         z-index: -1;
     }
