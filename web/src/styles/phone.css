@@ -48,6 +48,35 @@
         will-change: auto;
     }
 
+    /* nothing inside the rack should change while you scroll, so the phone
+       can draw it once and just slide it. No glow, no SVG shadows. */
+    .cable-glow {
+        display: none;
+    }
+
+    .ring rect {
+        filter: none;
+    }
+
+    /* the little looping effects inside the rack (screen flicker and roll,
+       blinking caret and LED) each make the phone redraw part of the rack
+       every frame. Hold them still. */
+    .caret,
+    .lcd::before,
+    .lcd::after,
+    .pi-leds .act {
+        animation: none;
+    }
+
+    /* the fixed bars and the rack view get their own GPU layers, so the
+       page scrolling underneath doesn't make the phone repaint them */
+    .viewport,
+    .hud-intro,
+    .hud-rail,
+    .hud-contact {
+        transform: translateZ(0);
+    }
+
     /* film grain is a full-screen layer on top of everything */
     .grain {
         display: none;

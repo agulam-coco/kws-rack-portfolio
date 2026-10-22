@@ -20,9 +20,16 @@ export default function Hud({ show }: { show: boolean }) {
     // move the marker every frame from the real scroll progress, so it slides
     // continuously instead of jumping row to row (hidden on phones)
     useEffect(() => {
+        // the marker only exists on desktop; on phones and tablets it's hidden,
+        // and touching its style every frame still makes the browser repaint
+        const desktop = window.matchMedia("(min-width: 1001px)");
+        let last = -1;
         const tick = () => {
-            const y = cameraState.progress * (stages.length - 1) * ROW;
-            if (marker.current) marker.current.style.transform = `translateY(${y}px)`;
+            if (!desktop.matches || !marker.current) return;
+            const y = Math.round(cameraState.progress * (stages.length - 1) * ROW * 10) / 10;
+            if (y === last) return;
+            last = y;
+            marker.current.style.transform = `translateY(${y}px)`;
         };
         gsap.ticker.add(tick);
         return () => gsap.ticker.remove(tick);
@@ -80,3 +87,4 @@ export default function Hud({ show }: { show: boolean }) {
         </div>
     );
 }
+

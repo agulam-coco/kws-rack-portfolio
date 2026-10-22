@@ -272,7 +272,9 @@ export default function Cables() {
             // light up the cables that lead there while you're scrolling
             const moving = speedT > 0.02;
             const key = [...active].join() + moving;
-            if (key !== hot) {
+            // phones: skip the glow. Toggling it repaints the whole rack every
+            // frame while you scroll, which is what made scrolling choppy.
+            if (!PHONE && key !== hot) {
                 hot = key;
                 lines.forEach((l) => l.g.classList.toggle("is-hot", moving && active.has(l.id)));
             }

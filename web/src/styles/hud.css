@@ -143,16 +143,12 @@
 }
 
 /* the contact sheet only exists on phones */
-.hud-contact {
-    display: none;
-}
+.hud-contact { display: none; }
 
 /* ---------- phones + tablets: top bar + bottom tab bar ---------- */
 /* (under 1000px there isn't room for text beside the rack) */
 @media (max-width: 1000px) {
-    .hud {
-        inset: 0;
-    }
+    .hud { inset: 0; }
 
     /* name, pinned to the top over a fade */
     .hud-intro {
@@ -162,22 +158,35 @@
         right: 0;
         width: auto;
         padding: calc(14px + env(safe-area-inset-top)) 18px 28px;
-        background: linear-gradient(#121110 55%, transparent);
         pointer-events: none;
     }
 
+    /* dark fade behind the name only (fixed height, so nothing has to
+       re-layout when the about text hides) */
+    .hud-intro::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: calc(84px + env(safe-area-inset-top));
+        background: linear-gradient(#121110 55%, transparent);
+        z-index: -1;
+    }
+
+    /* while the about shows, the fade covers it too */
+    .hud[data-stage="0"] .hud-intro::before {
+        height: 100%;
+    }
+
     /* the about only shows on the first screen, then tucks away */
+    /* the about only shows on the first screen, then fades away
+       (opacity only, so the phone doesn't re-layout every frame) */
     .hud-about {
-        max-height: 12em;
         margin-top: 10px;
         font-size: 13px;
-        overflow: hidden;
-        transition: max-height .5s ease, opacity .4s ease, margin .5s ease;
+        transition: opacity .3s ease;
     }
 
     .hud:not([data-stage="0"]) .hud-about {
-        max-height: 0;
-        margin-top: 0;
         opacity: 0;
     }
 
@@ -194,9 +203,7 @@
     }
 
     .hud-rail::before,
-    .hud-marker {
-        display: none;
-    }
+    .hud-marker { display: none; }
 
     .hud-row {
         flex: 1;
@@ -208,9 +215,7 @@
         letter-spacing: .04em;
     }
 
-    .hud-num {
-        position: relative;
-    }
+    .hud-num { position: relative; }
 
     /* LED dot above the active section */
     .hud-row.is-active .hud-num::before {
@@ -232,13 +237,8 @@
     }
 
     /* no hover on phones, only the active name shows */
-    .hud-row:hover .hud-name {
-        opacity: 0;
-    }
-
-    .hud-row.is-active .hud-name {
-        opacity: 1;
-    }
+    .hud-row:hover .hud-name { opacity: 0; }
+    .hud-row.is-active .hud-name { opacity: 1; }
 
     /* contact info, readable, above the tab bar */
     .hud-contact {
@@ -275,13 +275,8 @@
         list-style: none;
     }
 
-    .hud-contact li {
-        padding: 3px 0;
-    }
-
-    .hud-contact li span {
-        color: rgba(236, 230, 220, .55);
-    }
+    .hud-contact li { padding: 3px 0; }
+    .hud-contact li span { color: rgba(236, 230, 220, .55); }
 
     .hud-stack {
         margin: 10px 0 0;
@@ -324,3 +319,4 @@
     }
 
 }
+
