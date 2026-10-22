@@ -81,7 +81,6 @@ export default function ProjectTarget({ project, className, style, children }: {
     ref: refs.setReference,
     className: `${className} project-target`,
     style,
-    "aria-label": label,
     onPointerDown: (e: React.PointerEvent) => {
       pointer.current = e.pointerType;
       // remember if the card was already open BEFORE this tap (focus can
@@ -109,10 +108,12 @@ export default function ProjectTarget({ project, className, style, children }: {
       {action.external ? (
         <a {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)} href={action.href} target="_blank" rel="noopener noreferrer">
           {children}
+          <span className="sr-only">{label}</span>
         </a>
       ) : (
         <Link {...(props as object)} to={action.href} target="_blank" rel="noopener noreferrer">
           {children}
+          <span className="sr-only">{label}</span>
         </Link>
       )}
 
@@ -131,3 +132,4 @@ export default function ProjectTarget({ project, className, style, children }: {
     </>
   );
 }
+

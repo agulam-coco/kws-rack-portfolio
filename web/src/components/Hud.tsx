@@ -90,7 +90,7 @@ export default function Hud({ show }: { show: boolean }) {
 
             {/* phones only: the hatch text is too small to read on a phone,
                 so the same info slides up here at the contact stage */}
-            <section className={`hud-contact${i === CONTACT ? " is-open" : ""}`} aria-hidden={i !== CONTACT}>
+            <section className={`hud-contact${i === CONTACT ? " is-open" : ""}`} aria-hidden={i !== CONTACT} inert={i !== CONTACT}>
                 <ul>
                     {experience.map((e) => (
                         <li key={e.org}>

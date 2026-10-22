@@ -71,7 +71,7 @@ export default function BottomPanel() {
                         className="latch"
                         onClick={() => setOpen((o) => !o)}
                         aria-expanded={open}
-                        aria-label={open ? "Close the contact panel" : "Open the contact panel"}
+                        aria-label={open ? "Close the contact panel" : "Pull to open the contact panel"}
                     >
                         {open ? "close" : "pull"}
                     </button>

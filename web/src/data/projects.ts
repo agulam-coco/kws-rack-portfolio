@@ -33,7 +33,7 @@ export const projects: Project[] = [
     {
         id: "freesound", name: "Freesound", shelf: "nodes", color: "#22c55e",
         event: "Grinnell College",
-        summary: "The website for Freesound, the student music community I run.",
+        summary: "Grinnell's student music group. I help run it and built the website.",
         tags: ["React", "Vite", "Express"],
         links: { live: "https://freesound.us.reclaim.cloud/" },
     },
@@ -72,3 +72,4 @@ export function previewImages(p: Project) {
     if (repo) list.push(`https://opengraph.githubassets.com/1/${repo}`); // GitHub's auto card
     return list;
 }
+

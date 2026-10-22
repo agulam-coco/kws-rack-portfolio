@@ -27,7 +27,7 @@ export default function SwitchUnit() {
                             data-port={p.cable}
                             onClick={go(p)}
                             onAnimationEnd={(e) => e.currentTarget.classList.remove("is-firing")}
-                            aria-label={p.cable === "" ? "Spare port" : `Go to ${p.label.toLowerCase()}`}
+                            aria-label={p.cable === "" ? "SFP, spare port" : `Go to ${p.label.toLowerCase()}`}
                         >
                             <span className="port-label">{p.label}</span>
                             <span className="jack"><i className="led" /></span>

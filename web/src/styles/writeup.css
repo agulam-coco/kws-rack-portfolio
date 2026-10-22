@@ -5,7 +5,7 @@
     --accent: var(--led);
     --paper: #ece3d4;
     --ink: #24201b;
-    --ink-soft: rgba(36, 32, 27, .6);
+    --ink-soft: rgba(36, 32, 27, .74);
     --serif: "Newsreader Variable", Georgia, serif;
 
     min-height: 100vh;
@@ -158,6 +158,31 @@
     color: var(--ink-soft);
 }
 
+/* a logo at the top of a write-up, small and left aligned */
+.wu-body .wu-logo {
+    width: 220px;
+    max-width: 60%;
+    margin: 0 0 28px;
+}
+
+/* a single tall photo that shouldn't fill the whole column */
+.wu-body figure.wu-narrow,
+.wu-body video.wu-narrow {
+    max-width: 380px;
+}
+
+/* photo credit under a grid of someone else's photos */
+.wu-body .wu-credit {
+    margin: -20px 0 32px;
+    font: 12px var(--font-mono);
+    color: var(--ink-soft);
+}
+
+.wu-body figcaption a,
+.wu-body .wu-credit a {
+    color: inherit;
+}
+
 .wu-grid {
     display: grid;
     gap: 12px;
@@ -200,3 +225,4 @@
 .wu-body .wu-gallery img:hover {
     filter: brightness(1.08);
 }
+
