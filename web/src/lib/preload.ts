@@ -1,8 +1,8 @@
 const IMAGES = [
-  "/media/room/room-bg.png",
-  "/media/room/room-desk.png",
-  "/media/room/room-desk-empty.png",
-  "/media/room/room-fg.png",
+  "/media/room/room-bg.webp",
+  "/media/room/room-desk.webp",
+  "/media/room/room-desk-empty.webp",
+  "/media/room/room-fg.webp",
   "/media/room/room-bg-blur.webp",
   "/media/room/room-desk-empty-blur.webp",
 ];
