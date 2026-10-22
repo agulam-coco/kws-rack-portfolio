@@ -32,7 +32,7 @@
 .hud-who {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.7;
     letter-spacing: .04em;
     color: var(--muted);
@@ -55,8 +55,8 @@
 
 .hud-about {
     margin-top: 16px;
-    font-family: "Outfit", system-ui, sans-serif;
-    font-size: 13px;
+    font-family: var(--font-display);
+    font-size: 15px;
     line-height: 1.55;
     color: rgba(236, 230, 220, .62);
 }
@@ -120,7 +120,7 @@
     background: none;
     color: rgba(236, 230, 220, .32);
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: .06em;
     cursor: pointer;
     transition: color .3s ease;
@@ -190,7 +190,7 @@
        (opacity only, so the phone doesn't re-layout every frame) */
     .hud-about {
         margin-top: 10px;
-        font-size: 13px;
+        font-size: 15px;
         transition: opacity .3s ease;
     }
 

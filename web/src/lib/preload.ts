@@ -4,9 +4,9 @@ import { ROOM_SRC } from "./intro";
 const IMAGES = Object.values(ROOM_SRC).filter((src): src is string => !!src);
 
 const FONTS = [
-  '700 30px "Space Grotesk"',
-  '500 12px "JetBrains Mono"',
-  '600 12px "JetBrains Mono"',
+  '600 30px "Newsreader Variable"',
+  '400 12px "Courier Prime"',
+  '700 12px "Courier Prime"',
 ];
 
 // Film grain as a real image, generated once.
