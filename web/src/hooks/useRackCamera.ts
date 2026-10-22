@@ -8,7 +8,9 @@ import { cameraState, setStage } from "../lib/cameraState";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const FILL = 0.58;
+// how much of the screen width the rack fills: desktop leaves room for the
+// side text and hover cards, phones use almost the full width
+const fill = () => (window.innerWidth <= 700 ? 0.94 : 0.58);
 
 // Color grade, lamp, and side panel: room look vs zoomed-in look.
 const LOOK_ROOM = { "--grade": 0.65, "--lamp": 1, "--side": 1 };
@@ -34,7 +36,7 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             return;
         }
 
-        const zoom = () => (window.innerWidth * FILL) / rack.offsetWidth;
+        const zoom = () => (window.innerWidth * fill()) / rack.offsetWidth;
 
         const yFor = (id: string) => () => {
             const unit = rack.querySelector<HTMLElement>(`[data-stage="${id}"]`)!;

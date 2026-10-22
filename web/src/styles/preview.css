@@ -170,3 +170,30 @@
 .pc-actions a:hover {
     text-decoration: underline;
 }
+
+/* ---------- phones: the card is a sheet at the bottom of the screen ---------- */
+.preview-layer.is-sheet {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: calc(66px + env(safe-area-inset-bottom)); /* above the tab bar */
+}
+
+.preview-layer.is-sheet .preview-card {
+    width: 100%;
+    min-width: 0;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* shorter image so the sheet doesn't cover the whole rack */
+.preview-layer.is-sheet .pc-media {
+    aspect-ratio: 2.4 / 1;
+}
+
+/* no sticky hover lift after a tap on touch screens */
+@media (hover: none) {
+    .node:hover { transform: translateZ(10px); }
+    .amp.project-target:hover,
+    .pi.project-target:hover { transform: translateZ(6px); box-shadow: none; }
+}

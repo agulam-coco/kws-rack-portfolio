@@ -4,9 +4,10 @@ import {
   useFloating, useHover, useFocus, useDismiss, useRole, useInteractions,
   safePolygon, offset, shift, autoUpdate, FloatingPortal,
 } from "@floating-ui/react";
-import { type Project } from "../../data/projects";
+import type { Project } from "../../data/projects";
 import { primaryAction } from "../../lib/writeups";
 import PreviewCard from "./PreviewCard";
+import { useIsPhone } from "../../hooks/useIsPhone";
 
 // Wraps a rack unit (node, amp, Pi) so it's a real link with a hover card.
 // - mouse: hover shows the card, click opens the project
@@ -25,6 +26,7 @@ export default function ProjectTarget({ project, className, style, children }: {
 }) {
   const [open, setOpenState] = useState(false);
   const pointer = useRef<string>("mouse");
+  const wasOpen = useRef(false);
 
   const setOpen = (next: boolean) => {
     if (next) {
@@ -58,8 +60,16 @@ export default function ProjectTarget({ project, className, style, children }: {
     });
   }, [refs, open]);
 
-  const hover = useHover(context, { delay: { open: 120, close: 90 }, handleClose: safePolygon(), mouseOnly: true });
+  const phone = useIsPhone();
+  // hover only on devices with a real mouse; on touch screens the tap opens the card
+  const hover = useHover(context, {
+    enabled: !phone && window.matchMedia("(hover: hover)").matches,
+    delay: { open: 120, close: 90 },
+    handleClose: safePolygon(),
+    mouseOnly: true,
+  });
   const focus = useFocus(context);
+  // on phones the card is a sheet at the bottom; tap anywhere else to close it
   const dismiss = useDismiss(context);
   const role = useRole(context, { role: "dialog" });
   const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
@@ -72,10 +82,15 @@ export default function ProjectTarget({ project, className, style, children }: {
     className: `${className} project-target`,
     style,
     "aria-label": label,
-    onPointerDown: (e: React.PointerEvent) => { pointer.current = e.pointerType; },
+    onPointerDown: (e: React.PointerEvent) => {
+      pointer.current = e.pointerType;
+      // remember if the card was already open BEFORE this tap (focus can
+      // open it between pointerdown and click)
+      wasOpen.current = open;
+    },
     // on touch, the first tap only opens the card
     onClick: (e: React.MouseEvent) => {
-      if (pointer.current === "touch" && !open) {
+      if (pointer.current === "touch" && !wasOpen.current) {
         e.preventDefault();
         setOpen(true);
         return;
@@ -103,7 +118,12 @@ export default function ProjectTarget({ project, className, style, children }: {
 
       {open && (
         <FloatingPortal>
-          <div ref={refs.setFloating} style={floatingStyles} className="preview-layer" {...getFloatingProps()}>
+          <div
+            ref={refs.setFloating}
+            style={phone ? undefined : floatingStyles}
+            className={`preview-layer${phone ? " is-sheet" : ""}`}
+            {...getFloatingProps()}
+          >
             <PreviewCard project={project} />
           </div>
         </FloatingPortal>
