@@ -96,10 +96,18 @@
     top: calc(var(--row) / 2 - 8px);
     width: 9px;
     height: 16px;
+    will-change: transform;
+}
+
+/* the tape is tilted on its own layer: tilting the marker itself made it
+   slide diagonally (and off the rail) as it moved down */
+.hud-marker::before {
+    content: "";
+    position: absolute;
+    inset: 0;
     background: var(--tape);
     clip-path: var(--torn);
     rotate: -6deg;
-    will-change: transform;
 }
 
 .hud-row {
