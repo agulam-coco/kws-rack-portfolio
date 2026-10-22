@@ -10,7 +10,9 @@ export function useLenis() {
     useEffect(() => {
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-        const lenis = new Lenis({ lerp: 0.09 });
+        // lerp: how fast the page catches up to your wheel (0.1 = floaty, 0.2 = snappy)
+        const lenis = new Lenis({ lerp: 0.15 });
+
         lenis.on("scroll", ScrollTrigger.update);
         cameraState.lenis = lenis;
         const tick = (t: number) => lenis.raf(t * 1000);

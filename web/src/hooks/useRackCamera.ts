@@ -16,6 +16,11 @@ const fill = () => (window.innerWidth <= 700 ? 0.94 : 0.58);
 const LOOK_ROOM = { "--grade": 0.65, "--lamp": 1, "--side": 1 };
 const LOOK_FINAL = { "--grade": 0.3, "--lamp": 0.6, "--side": 1 };
 
+// ---------- scroll feel ----------
+const SCROLL_PER_STAGE = 0.7; // how much scrolling moves you one shelf (x screen height)
+const SNAP_DELAY = 400;       // ms of no scrolling before it settles onto the nearest shelf
+const SNAP_DURATION = 0.6;    // s the settle takes
+
 export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boolean) {
     useGSAP(() => {
         const root = scope.current!;
@@ -65,15 +70,16 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
 
         // ---------- scroll: pan from unit to unit ----------
         const tl = gsap.timeline({
-            defaults: { ease: "power2.inOut", duration: 1 },
+            // linear: the camera moves exactly as much as you scroll, so it never
+            // feels heavy. The easing happens in the snap instead (below).
+            defaults: { ease: "none", duration: 1 },
             scrollTrigger: {
                 trigger: viewport,
                 start: "top top",
-                end: () => `+=${window.innerHeight * (stages.length - 1)}`,
+                end: () => `+=${window.innerHeight * SCROLL_PER_STAGE * (stages.length - 1)}`,
                 pin: true,
-                scrub: 1,
+                scrub: true, // follow the scroll exactly (Lenis already smooths the wheel)
                 invalidateOnRefresh: true,
-                snap: { snapTo: "labels", duration: { min: 0.2, max: 0.6 }, delay: 0.1 },
                 onUpdate: (self) => {
                     cameraState.progress = self.progress;
                     setStage(Math.round(self.progress * (stages.length - 1)));
@@ -87,12 +93,17 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
 
         ScrollTrigger.refresh();
         // ---------- jump to a stage (used by the switch ports) ----------
-        cameraState.goTo = (id, duration) => {
+        // where a stage's label sits in the page's scroll
+        const scrollFor = (id: string) => {
             const st = tl.scrollTrigger;
             const t = tl.labels[id];
-            if (!st || t === undefined) return;
-            // where that stage's label sits in the page's scroll
-            const y = st.start + (st.end - st.start) * (t / tl.duration());
+            if (!st || t === undefined) return null;
+            return st.start + (st.end - st.start) * (t / tl.duration());
+        };
+
+        cameraState.goTo = (id, duration) => {
+            const y = scrollFor(id);
+            if (y === null) return;
             if (cameraState.lenis) {
                 cameraState.lenis.scrollTo(y, { duration, easing: (x) => 1 - Math.pow(1 - x, 3) });
             } else {
@@ -129,6 +140,37 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             gsap.set(fg, { autoAlpha: 0 });
             return;
         }
+        // ---------- snap: scroll freely, then settle onto the nearest shelf ----------
+        // Done here instead of ScrollTrigger's snap, which fights with Lenis
+        // and makes the scroll feel heavy.
+        let snapTimer = 0;
+        let touching = false;
+        const settle = () => {
+            if (touching) return;
+            const st = tl.scrollTrigger;
+            const y = window.scrollY;
+            if (!st || y < st.start || y > st.end) return; // outside the rack
+            let best = y, dist = Infinity;
+            for (const s of stages) {
+                const sy = scrollFor(s.id);
+                if (sy !== null && Math.abs(sy - y) < dist) { dist = Math.abs(sy - y); best = sy; }
+            }
+            if (dist < 2) return; // already there
+            if (cameraState.lenis) {
+                cameraState.lenis.scrollTo(best, { duration: SNAP_DURATION, easing: (x) => 1 - Math.pow(1 - x, 3) });
+            } else {
+                window.scrollTo({ top: best, behavior: "smooth" });
+            }
+        };
+        const onScroll = () => {
+            window.clearTimeout(snapTimer);
+            snapTimer = window.setTimeout(settle, SNAP_DELAY);
+        };
+        const onTouchStart = () => { touching = true; window.clearTimeout(snapTimer); };
+        const onTouchEnd = () => { touching = false; onScroll(); };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("touchstart", onTouchStart, { passive: true });
+        window.addEventListener("touchend", onTouchEnd, { passive: true });
 
         // lighting layers, animated by opacity (GPU) instead of CSS variables (repaint)
         const grade = rack.querySelector(".rack-grade");
@@ -155,6 +197,10 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         return () => {
             document.documentElement.style.overflow = "";
             cameraState.goTo = () => { };
+            window.clearTimeout(snapTimer);
+            window.removeEventListener("scroll", onScroll);
+            window.removeEventListener("touchstart", onTouchStart);
+            window.removeEventListener("touchend", onTouchEnd);
         };
     }, { scope, dependencies: [ready], revertOnUpdate: true });
 }
