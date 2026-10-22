@@ -23,12 +23,13 @@ export const IS_PHONE = window.matchMedia("(max-width: 700px)").matches;
 // Room images. With the intro skipped, only the blurred layers ever show,
 // so the sharp ones (and the chair) aren't downloaded at all.
 const room = (f: string) => `/media/room/${f}`;
+// Phones skip the room entirely (phone.css uses one blurred photo instead).
+const sharp = !SKIP_INTRO && !IS_PHONE;
 export const ROOM_SRC = {
-    bg: SKIP_INTRO ? undefined : room("room-bg.webp"),
+    bg: sharp ? room("room-bg.webp") : undefined,
     bgBlur: room("room-bg-blur.webp"),
-    deskEmpty: SKIP_INTRO ? undefined : room("room-desk-empty.webp"),
-    deskEmptyBlur: room("room-desk-empty-blur.webp"),
-    desk: SKIP_INTRO ? undefined : room("room-desk.webp"),
-    // the chair is drawn at 2x for big screens; phones get the 1x version
-    fg: SKIP_INTRO ? undefined : room(IS_PHONE ? "room-fg-sm.webp" : "room-fg.webp"),
+    deskEmpty: sharp ? room("room-desk-empty.webp") : undefined,
+    deskEmptyBlur: IS_PHONE ? undefined : room("room-desk-empty-blur.webp"),
+    desk: sharp ? room("room-desk.webp") : undefined,
+    fg: sharp ? room("room-fg.webp") : undefined,
 };

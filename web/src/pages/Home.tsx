@@ -16,6 +16,12 @@ export default function Home() {
         preloadAll(setProgress).then(() => setReady(true));
     }, []);
 
+    // no pinch-zoom on the rack page (see phone.css)
+    useEffect(() => {
+        document.documentElement.classList.add("no-pinch");
+        return () => document.documentElement.classList.remove("no-pinch");
+    }, []);
+
     useLenis();
     useRackCamera(scene, ready);
 

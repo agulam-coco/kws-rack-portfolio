@@ -1,0 +1,65 @@
+/* ---------- phones: a lighter version of the rack ----------
+   Phones have a small memory budget for the GPU, and every 3D panel, blend
+   mode and full-size room image becomes its own layer. Too many and scrolling
+   stutters; pinch-zooming multiplies them and iOS kills the tab.
+   So on phones: no 3D, no blend modes, and the room is a flat blurred photo. */
+@media (max-width: 700px) {
+
+    /* the room: one flat blurred photo behind everything instead of six
+       stacked full-size images */
+    .viewport {
+        perspective: none;
+        background: #121110 url("/media/room/room-bg-blur.webp") center 30% / cover no-repeat;
+    }
+
+    .room {
+        display: none;
+    }
+
+    /* flatten the 3D: plates and units sit flat on the rack */
+    .plate,
+    .switch,
+    .lcd,
+    .bay,
+    .amp,
+    .pi,
+    .node,
+    .node:hover,
+    .rack-handle {
+        transform: none !important;
+        transform-style: flat !important;
+    }
+
+    .plate::before,
+    .plate::after,
+    .rack-top,
+    .rack-side,
+    .rack-side2d {
+        display: none;
+    }
+
+    /* the warm tint without a blend mode (blend modes force extra layers) */
+    .rack-grade {
+        mix-blend-mode: normal;
+        opacity: .1 !important;
+    }
+
+    .cables {
+        will-change: auto;
+    }
+
+    /* film grain is a full-screen layer on top of everything */
+    .grain {
+        display: none;
+    }
+
+    body {
+        background: #121110;
+    }
+}
+
+/* the rack page can't be pinch-zoomed: it multiplies the GPU memory and
+   crashes iOS. Write-up pages zoom normally. (Home.tsx sets this class.) */
+html.no-pinch {
+    touch-action: pan-x pan-y;
+}

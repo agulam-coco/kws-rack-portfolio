@@ -6,6 +6,7 @@
 @import "./preview.css";
 @import "./hud.css";
 @import "./writeup.css";
+@import "./phone.css";
 
 :root {
     --bg: #121110;
