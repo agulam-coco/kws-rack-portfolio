@@ -152,6 +152,11 @@
     animation: twinkle 2.6s ease-in-out infinite;
 }
 
+/* phones: the lights sit still (they're blurred behind the rack anyway) */
+@media (max-width: 700px) {
+    .fairy i { animation: none; opacity: .75; }
+}
+
 @keyframes twinkle {
 
     0%,

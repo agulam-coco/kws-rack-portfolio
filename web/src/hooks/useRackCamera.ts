@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { stages } from "../data/site";
 import { ROOM } from "../data/room";
 import { cameraState, setStage } from "../lib/cameraState";
+import { IS_PHONE, SKIP_INTRO, markIntroSeen } from "../lib/intro";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -15,21 +16,6 @@ const fill = () => (window.innerWidth <= 700 ? 0.94 : 0.58);
 // Color grade, lamp, and side panel: room look vs zoomed-in look.
 const LOOK_ROOM = { "--grade": 0.65, "--lamp": 1, "--side": 1 };
 const LOOK_FINAL = { "--grade": 0.3, "--lamp": 0.6, "--side": 1 };
-
-// ---------- returning visitors skip the intro ----------
-// The push-in only plays the first time. Visit /?intro to see it again.
-const SEEN_KEY = "rack-intro-seen";
-const introSeen = () => {
-    if (new URLSearchParams(location.search).has("intro")) return false;
-    try { return localStorage.getItem(SEEN_KEY) === "1"; } catch { return false; }
-};
-const markIntroSeen = () => {
-    try { localStorage.setItem(SEEN_KEY, "1"); } catch { /* private mode etc. */ }
-};
-// decided once when the page loads, before anything renders, so the side
-// text (hud.css) knows not to wait for the camera
-const SKIP_INTRO = introSeen();
-if (SKIP_INTRO) document.documentElement.dataset.intro = "seen";
 
 // ---------- scroll feel ----------
 const SCROLL_PER_STAGE = 0.7; // how much scrolling moves you one shelf (x screen height)
@@ -222,7 +208,9 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             .to(fairy, { autoAlpha: 0.35, duration: 1 }, 1.1)
             // ease the lighting into the zoomed-in look
             .to(grade, { opacity: LOOK_FINAL["--grade"], duration: 1 }, 1.2)
-            .to(lamp, { opacity: LOOK_FINAL["--lamp"], duration: 1 }, 1.2);
+            .to(lamp, { opacity: LOOK_FINAL["--lamp"], duration: 1 }, 1.2)
+            // a bit quicker on phones, where every frame costs more
+            .timeScale(IS_PHONE ? 1.3 : 1);
 
         return () => {
             document.documentElement.style.overflow = "";
@@ -234,3 +222,4 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         };
     }, { scope, dependencies: [ready], revertOnUpdate: true });
 }
+
