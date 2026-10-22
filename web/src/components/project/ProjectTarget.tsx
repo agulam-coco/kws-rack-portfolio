@@ -4,7 +4,7 @@ import {
   useFloating, useHover, useFocus, useDismiss, useRole, useInteractions,
   safePolygon, offset, shift, autoUpdate, FloatingPortal,
 } from "@floating-ui/react";
-import { previewImages, type Project } from "../../data/projects";
+import { type Project } from "../../data/projects";
 import { primaryAction } from "../../lib/writeups";
 import PreviewCard from "./PreviewCard";
 
