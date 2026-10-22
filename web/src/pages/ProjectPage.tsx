@@ -22,8 +22,19 @@ export default function ProjectPage() {
     }, [load]);
 
     useEffect(() => {
-        if (project) document.title = `${project.name} · ${person.name}`;
-        return () => { document.title = person.name; };
+        if (!project) return;
+        // per-page title, description and canonical for Google (it runs JS)
+        const desc = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+        const canon = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+        const before = { title: document.title, desc: desc?.content, canon: canon?.href };
+        document.title = `${project.name} · ${person.name}`;
+        if (desc) desc.content = project.summary;
+        if (canon) canon.href = `https://jasonchigabatia.com/projects/${project.id}`;
+        return () => {
+            document.title = before.title;
+            if (desc && before.desc) desc.content = before.desc;
+            if (canon && before.canon) canon.href = before.canon;
+        };
     }, [project]);
 
     if (!project) return <NotFound />;
