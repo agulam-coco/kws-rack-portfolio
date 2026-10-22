@@ -8,6 +8,14 @@
 @import "./writeup.css";
 @import "./phone.css";
 
+/* hand-lettered marker font, for the masking tape labels */
+@font-face {
+    font-family: "Permanent Marker";
+    src: url("../assets/fonts/permanent-marker.woff2") format("woff2");
+    font-display: swap;
+}
+
+
 :root {
     --bg: #121110;
     --text: #ece6dc;
@@ -18,6 +26,12 @@
     --beige-dark: #d6c6b0;
     --rail: #1b1b1b;
     --ink: #2a2622;
+    /* masking tape + marker, for labels and "you are here" bits */
+    --tape: #e3d5b3;
+    --marker: #1d1b19;
+    --font-hand: "Permanent Marker", "Comic Sans MS", cursive;
+    /* torn ends, used as a clip-path on tape pieces */
+    --torn: polygon(0 6%, 3% 0, 50% 4%, 97% 0, 100% 5%, 99% 94%, 96% 100%, 50% 96%, 4% 100%, 1% 95%);
     --font-display: "Space Grotesk", system-ui, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
 

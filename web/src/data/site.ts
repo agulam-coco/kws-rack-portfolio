@@ -23,14 +23,14 @@ export const stages = [
     {
         id: "overview",
         label: "/01 overview",
-        hint: "scroll to look around",
+        hint: "scroll down, it's a whole rack",
         title: person.name,
         body: "CS and Linguistics at Grinnell, class of 2028. I write software, and lately a lot of it runs on hardware I can actually hold.",
     },
     {
         id: "network",
         label: "/02 network",
-        hint: "tap a port to follow its cable",
+        hint: "the ports work, tap one",
         title: "This switch is the menu",
         body: "Each port has a cable running to a different part of the rack. Click one and the page follows the cable there.",
     },
@@ -44,14 +44,14 @@ export const stages = [
     {
         id: "projects",
         label: "/04 projects",
-        hint: "tap a drive to open it",
+        hint: "tap a drive, they're my projects",
         title: "Projects",
         body: "Each machine is something I built. Hover over one to see what it is, and click to open it.",
     },
     {
         id: "builds",
         label: "/05 builds",
-        hint: "tap the amp or the pi",
+        hint: "the amp and the pi open too",
         title: "Off the screen",
         body: "Things I've made or put together that aren't just code.",
     },

@@ -591,14 +591,16 @@
 
 /* the resume is the one most people want, so it stands out */
 .contact-links a.is-resume {
-    border-color: rgba(93, 255, 138, .5);
-    background: rgba(93, 255, 138, .08);
-    color: var(--led);
+    border-color: transparent;
+    background: var(--tape);
+    color: var(--marker);
+    font-weight: 700;
+    rotate: -1.5deg;
 }
 
 .contact-links a.is-resume:hover,
 .contact-links a.is-resume:focus-visible {
-    background: rgba(93, 255, 138, .16);
+    background: #efe3c4;
 }
 
 /* ----- the grille: slides up, leaving a lip with the pull tab ----- */

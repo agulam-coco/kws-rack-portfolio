@@ -92,13 +92,13 @@
 
 .hud-marker {
     position: absolute;
-    left: -1px;
-    top: calc(var(--row) / 2 - 7px);
-    width: 3px;
-    height: 14px;
-    border-radius: 2px;
-    background: var(--led);
-    box-shadow: 0 0 10px rgba(93, 255, 138, .6);
+    left: -4px;
+    top: calc(var(--row) / 2 - 8px);
+    width: 9px;
+    height: 16px;
+    background: var(--tape);
+    clip-path: var(--torn);
+    rotate: -6deg;
     will-change: transform;
 }
 
@@ -215,20 +215,26 @@
         letter-spacing: .04em;
     }
 
-    .hud-num { position: relative; }
+    .hud-num {
+        position: relative;
+        z-index: 0;
+        padding: 1px 2px;
+    }
 
-    /* LED dot above the active section */
+    /* a piece of masking tape stuck behind the active number */
+    .hud-row.is-active .hud-num {
+        color: var(--marker);
+        font-weight: 700;
+    }
+
     .hud-row.is-active .hud-num::before {
         content: "";
         position: absolute;
-        left: 50%;
-        top: -7px;
-        width: 4px;
-        height: 4px;
-        margin-left: -2px;
-        border-radius: 50%;
-        background: var(--led);
-        box-shadow: 0 0 6px var(--led);
+        inset: -3px -7px;
+        z-index: -1;
+        background: var(--tape);
+        clip-path: var(--torn);
+        rotate: -4deg;
     }
 
     .hud-name {
@@ -298,9 +304,11 @@
     }
 
     .hud-links a.is-resume {
-        border-color: rgba(93, 255, 138, .5);
-        background: rgba(93, 255, 138, .08);
-        color: var(--led);
+        border-color: transparent;
+        background: var(--tape);
+        color: var(--marker);
+        font-weight: 700;
+        rotate: -1.5deg;
     }
 }
 
@@ -311,36 +319,33 @@
 .hud-hint {
     position: fixed;
     left: 50%;
-    bottom: calc(80px + env(safe-area-inset-bottom));
+    bottom: calc(84px + env(safe-area-inset-bottom));
     margin: 0;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(18, 17, 16, .82);
-    font: 11px/1.3 var(--font-mono);
-    letter-spacing: .04em;
+    padding: 6px 16px 5px;
+    /* shadow so the tape still reads when it sits over the beige rack */
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .55));
+    font: 13px/1.3 var(--font-hand);
+    letter-spacing: .02em;
     white-space: nowrap;
-    color: rgba(236, 230, 220, .75);
+    color: var(--marker);
     pointer-events: none;
     opacity: 0;
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(-2deg);
     transition: opacity .3s ease;
+}
+
+/* the tape itself (on a layer, so the torn clip doesn't cut off the shadow) */
+.hud-hint::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--tape);
+    clip-path: var(--torn);
 }
 
 .hud.is-on .hud-hint.is-on {
     opacity: 1;
-}
-
-/* little green LED in front, same as the rest of the rack */
-.hud-hint::before {
-    content: "";
-    display: inline-block;
-    width: 5px;
-    height: 5px;
-    margin-right: 8px;
-    border-radius: 50%;
-    vertical-align: 1px;
-    background: var(--led);
-    box-shadow: 0 0 6px var(--led);
 }
 
 /* tablets in landscape keep the desktop rail, so the hint just sits low */
@@ -353,7 +358,7 @@
 @media (hover: none) {
     /* uses `translate`, not `transform`, because phone.css flattens transforms */
     .rack [data-nudge] {
-        outline: 3px solid transparent;
+        outline: 3px dashed transparent;
         outline-offset: 5px;
         animation: tap-nudge 1.1s ease-in-out both;
     }
@@ -374,12 +379,12 @@
     0%,
     100% {
         translate: 0 0;
-        outline-color: rgba(93, 255, 138, 0);
+        outline-color: rgba(227, 213, 179, 0);
     }
 
     20% {
         translate: 0 -14px;
-        outline-color: rgba(93, 255, 138, .85);
+        outline-color: rgba(227, 213, 179, .9);
     }
 
     40% {
@@ -392,7 +397,7 @@
 
     70% {
         translate: 0 0;
-        outline-color: rgba(93, 255, 138, .5);
+        outline-color: rgba(227, 213, 179, .55);
     }
 }
 
