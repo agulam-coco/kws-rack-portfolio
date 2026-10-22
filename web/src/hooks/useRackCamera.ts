@@ -16,6 +16,21 @@ const fill = () => (window.innerWidth <= 700 ? 0.94 : 0.58);
 const LOOK_ROOM = { "--grade": 0.65, "--lamp": 1, "--side": 1 };
 const LOOK_FINAL = { "--grade": 0.3, "--lamp": 0.6, "--side": 1 };
 
+// ---------- returning visitors skip the intro ----------
+// The push-in only plays the first time. Visit /?intro to see it again.
+const SEEN_KEY = "rack-intro-seen";
+const introSeen = () => {
+    if (new URLSearchParams(location.search).has("intro")) return false;
+    try { return localStorage.getItem(SEEN_KEY) === "1"; } catch { return false; }
+};
+const markIntroSeen = () => {
+    try { localStorage.setItem(SEEN_KEY, "1"); } catch { /* private mode etc. */ }
+};
+// decided once when the page loads, before anything renders, so the side
+// text (hud.css) knows not to wait for the camera
+const SKIP_INTRO = introSeen();
+if (SKIP_INTRO) document.documentElement.dataset.intro = "seen";
+
 // ---------- scroll feel ----------
 const SCROLL_PER_STAGE = 0.7; // how much scrolling moves you one shelf (x screen height)
 const SNAP_DELAY = 400;       // ms of no scrolling before it settles onto the nearest shelf
@@ -140,6 +155,7 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             gsap.set(fg, { autoAlpha: 0 });
             return;
         }
+
         // ---------- snap: scroll freely, then settle onto the nearest shelf ----------
         // Done here instead of ScrollTrigger's snap, which fights with Lenis
         // and makes the scroll feel heavy.
@@ -176,9 +192,23 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
         const grade = rack.querySelector(".rack-grade");
         const lamp = rack.querySelectorAll(".rack-light, .rack-rim");
 
-        gsap.timeline({
+        // been here before: jump straight to where the intro ends
+        if (SKIP_INTRO) {
+            gsap.set(tilt, { scale: 1, y: 0 });
+            gsap.set(fg, { autoAlpha: 0 });
+            gsap.set(desk, { autoAlpha: 0 });
+            gsap.set(rack, { autoAlpha: 1 });
+            gsap.set(blur, { autoAlpha: 1 });
+            gsap.set(fairy, { autoAlpha: 0.35 });
+            gsap.set(grade, { opacity: LOOK_FINAL["--grade"] });
+            gsap.set(lamp, { opacity: LOOK_FINAL["--lamp"] });
+            document.documentElement.style.overflow = "";
+        } else gsap.timeline({
             delay: 0.35, // let the loader fade out first
-            onComplete: () => { document.documentElement.style.overflow = ""; },
+            onComplete: () => {
+                document.documentElement.style.overflow = "";
+                markIntroSeen();
+            },
         })
             // the push in
             .to(tilt, { scale: 1, y: 0, duration: 2.1, ease: "power2.inOut" }, 0)
