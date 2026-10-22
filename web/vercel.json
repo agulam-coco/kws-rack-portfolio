@@ -7,7 +7,7 @@
     ],
     "headers": [
         {
-            "source": "/media/(.*)",
+            "source": "/(media|fonts)/(.*)",
             "headers": [
                 {
                     "key": "Cache-Control",

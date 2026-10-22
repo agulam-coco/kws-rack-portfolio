@@ -11,8 +11,9 @@
 /* hand-lettered marker font, for the masking tape labels */
 @font-face {
     font-family: "Permanent Marker";
-    src: url("../assets/fonts/permanent-marker.woff2") format("woff2");
-    font-display: swap;
+    src: url("/fonts/permanent-marker.woff2") format("woff2");
+    /* "block" so iPhones wait for the marker font instead of showing a fallback */
+    font-display: block;
 }
 
 
