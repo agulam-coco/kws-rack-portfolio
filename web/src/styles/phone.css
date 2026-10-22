@@ -9,7 +9,16 @@
        stacked full-size images */
     .viewport {
         perspective: none;
+    }
+
+    /* the blurred room stays put behind the rack while the page scrolls */
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
         background: #121110 url("/media/room/room-bg-blur.webp") center 30% / cover no-repeat;
+        transform: translateZ(0);
     }
 
     .room {
@@ -70,7 +79,6 @@
 
     /* the fixed bars and the rack view get their own GPU layers, so the
        page scrolling underneath doesn't make the phone repaint them */
-    .viewport,
     .hud-intro,
     .hud-rail,
     .hud-contact {
@@ -85,6 +93,13 @@
     body {
         background: #121110;
     }
+}
+
+/* phones: the rack is part of the page and scrolls natively (phoneScroll.ts),
+   instead of sitting in a fixed view with a JavaScript camera */
+html.phone-scroll .viewport {
+    position: relative;
+    overflow: hidden;
 }
 
 /* the rack page can't be pinch-zoomed: it multiplies the GPU memory and

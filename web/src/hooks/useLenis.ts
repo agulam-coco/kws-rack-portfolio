@@ -3,12 +3,14 @@ import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cameraState } from "../lib/cameraState";
+import { IS_PHONE } from "../lib/intro";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function useLenis() {
     useEffect(() => {
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        if (IS_PHONE) return; // phones scroll natively (phoneScroll.ts)
 
         // lerp: how fast the page catches up to your wheel (0.1 = floaty, 0.2 = snappy)
         const lenis = new Lenis({ lerp: 0.15 });

@@ -6,6 +6,7 @@ import { stages } from "../data/site";
 import { ROOM } from "../data/room";
 import { cameraState, setStage } from "../lib/cameraState";
 import { IS_PHONE, SKIP_INTRO, markIntroSeen } from "../lib/intro";
+import { setupPhoneScroll } from "./phoneScroll";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -40,6 +41,9 @@ export function useRackCamera(scope: RefObject<HTMLElement | null>, ready: boole
             document.documentElement.style.overflow = "hidden";
             return;
         }
+
+        // phones: native scrolling instead of the camera (see phoneScroll.ts)
+        if (IS_PHONE && !reduce) return setupPhoneScroll(root);
 
         const zoom = () => (window.innerWidth * fill()) / rack.offsetWidth;
 
