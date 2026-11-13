@@ -16,6 +16,11 @@
     display: block;
 }
 
+.project-target .mixer-face,
+.project-target .faders {
+    display: flex;
+}
+
 .project-target .node-bottom {
     display: flex;
 }
@@ -38,14 +43,17 @@
 }
 
 .amp,
-.pi {
+.pi,
+.mixer {
     transition: transform .25s, box-shadow .25s;
 }
 
 .amp.project-target:hover,
 .pi.project-target:hover,
+.mixer.project-target:hover,
 .amp.project-target:focus-visible,
-.pi.project-target:focus-visible {
+.pi.project-target:focus-visible,
+.mixer.project-target:focus-visible {
     transform: translateZ(6px) translateY(-3px);
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent), 0 10px 20px rgba(0, 0, 0, .5);
 }
@@ -176,7 +184,8 @@
     position: fixed;
     left: 12px;
     right: 12px;
-    bottom: calc(66px + env(safe-area-inset-bottom)); /* above the tab bar */
+    bottom: calc(66px + env(safe-area-inset-bottom));
+    /* above the tab bar */
 }
 
 .preview-layer.is-sheet .preview-card {
@@ -193,7 +202,14 @@
 
 /* no sticky hover lift after a tap on touch screens */
 @media (hover: none) {
-    .node:hover { transform: translateZ(10px); }
-    .amp.project-target:hover,
-    .pi.project-target:hover { transform: translateZ(6px); box-shadow: none; }
+    .node:hover {
+        transform: translateZ(10px);
+    }
+
+   .amp.project-target:hover,
+    .pi.project-target:hover,
+    .mixer.project-target:hover{
+        transform: translateZ(6px);
+        box-shadow: none;
+    }
 }

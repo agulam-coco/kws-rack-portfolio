@@ -49,6 +49,12 @@ export const projects: Project[] = [
         tags: ["Raspberry Pi", "Linux"],
         preview: "/media/previews/server-rack-card.jpg",
     },
+    {
+        id: "mixer-lights", name: "Mixer Lights", shelf: "builds", color: "#ef4444",
+        summary: "An old mixer on my desk that controls my room's lights.",
+        tags: ["Raspberry Pi", "MIDI", "Hardware"],
+        preview: "/media/previews/mixer-lights-card.jpg",
+    },
 ];
 
 export const nodes = projects.filter((p) => p.shelf === "nodes");

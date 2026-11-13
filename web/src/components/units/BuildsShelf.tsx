@@ -1,5 +1,6 @@
 import { getProject } from "../../data/projects";
 import AmpHead from "./builds/AmpHead";
+import MixerUnit from "./builds/MixerUnit";
 import PiUnit from "./builds/PiUnit";
 
 export default function BuildsShelf() {
@@ -8,6 +9,7 @@ export default function BuildsShelf() {
             <span className="tag">BUILDS</span>
             <AmpHead project={getProject("guitars")!} />
             <PiUnit project={getProject("server-rack")!} />
+            <MixerUnit project={getProject("mixer-lights")!} />
         </section>
     );
 }

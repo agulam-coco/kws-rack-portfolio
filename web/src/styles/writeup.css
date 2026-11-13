@@ -68,7 +68,8 @@
     text-decoration-color: var(--accent);
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
-    text-decoration-skip-ink: none; /* solid line, even under g, y, p */
+    text-decoration-skip-ink: none;
+    /* solid line, even under g, y, p */
 }
 
 /* ----- the MDX body ----- */
@@ -76,7 +77,7 @@
     font: 400 19px/1.65 var(--serif);
 }
 
-.wu-body > :first-child {
+.wu-body> :first-child {
     margin-top: 0;
 }
 
@@ -193,6 +194,10 @@
     grid-template-columns: 1fr 1fr;
 }
 
+.wu-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .wu-grid figure {
     margin: 0;
 }
@@ -225,4 +230,3 @@
 .wu-body .wu-gallery img:hover {
     filter: brightness(1.08);
 }
-

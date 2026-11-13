@@ -6,7 +6,8 @@
     left: 0;
     right: 0;
     height: 100vh;
-    height: 100lvh; /* phones: don't jump when the address bar hides */
+    height: 100lvh;
+    /* phones: don't jump when the address bar hides */
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -110,7 +111,8 @@
 .lcd,
 .bay,
 .amp,
-.pi {
+.pi,
+.mixer {
     transform: translateZ(6px);
 }
 
